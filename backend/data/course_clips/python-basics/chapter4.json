@@ -1,0 +1,38 @@
+[
+  {
+    "chapter_no": 4,
+    "clip_no": 1,
+    "clip_title": "함수 정의와 호출",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:09:00",
+    "concept_id": "python-functions",
+    "script_text": "자, 이번 챕터에서는 함수를 깊이 있게 다뤄볼 거예요. 함수는 코드를 재사용하고 구조화하는 핵심 도구입니다. def 키워드로 정의해요.\n\ndef greet(name):\n    return f'안녕하세요, {name}님!'\n\nmessage = greet('철수')\nprint(message)  # 안녕하세요, 철수님!\n\n여기서 꼭 알아야 할 게 있어요. return이 없는 함수는 아무것도 반환하지 않는다고 생각하시는 분들이 많은데, 사실은 None을 반환합니다.\n\ndef say_hello():\n    print('Hello!')\n\nresult = say_hello()  # Hello! 출력\nprint(result)         # None\nprint(type(result))   # <class 'NoneType'>\n\n'반환값 없음'이 아니라 'None을 반환'하는 거예요. 이걸 모르면 함수를 체이닝할 때 예상 못한 버그가 생길 수 있어요. 예를 들어 sorted_list = my_list.sort()를 하면 sorted_list는 None이에요. sort()는 리스트를 제자리에서 정렬하고 None을 반환하거든요. 정렬된 새 리스트가 필요하면 sorted(my_list)를 쓰세요.\n\noriginal = [3, 1, 2]\nsorted_list = sorted(original)  # [1, 2, 3]\nprint(original)  # [3, 1, 2] 원본 유지"
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 2,
+    "clip_title": "매개변수와 반환값",
+    "timestamp_start": "00:09:01",
+    "timestamp_end": "00:19:30",
+    "concept_id": "python-params-return",
+    "script_text": "이번에는 매개변수와 반환값을 자세히 볼게요. Python 함수는 매개변수를 다루는 방법이 다양해요.\n\n# 기본값 매개변수\ndef power(base, exp=2):\n    return base ** exp\n\nprint(power(3))     # 9 (exp=2 기본값)\nprint(power(3, 3))  # 27\n\n# 키워드 인자\ndef profile(name, age, city='서울'):\n    return f'{name}, {age}세, {city}'\n\nprint(profile(age=25, name='영희'))  # 순서 무관\n\n가변 인자도 중요해요. *args는 위치 인자를 튜플로, **kwargs는 키워드 인자를 딕셔너리로 받습니다.\n\ndef total(*args):\n    return sum(args)\n\nprint(total(1, 2, 3, 4, 5))  # 15\n\ndef print_info(**kwargs):\n    for key, value in kwargs.items():\n        print(f'{key}: {value}')\n\n반환값도 여러 개를 돌려줄 수 있어요. 사실 튜플을 반환하는 건데 언패킹하면 여러 값처럼 쓸 수 있어요.\n\ndef min_max(numbers):\n    return min(numbers), max(numbers)\n\nlo, hi = min_max([3, 1, 4, 1, 5, 9])\nprint(f'최솟값: {lo}, 최댓값: {hi}')\n\n주의! 기본값으로 가변 객체(리스트 등)를 쓰면 안 돼요. 정의 시점에 한 번만 생성되어 호출 간 공유됩니다."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 3,
+    "clip_title": "스코프와 클로저",
+    "timestamp_start": "00:19:31",
+    "timestamp_end": "00:30:00",
+    "concept_id": "python-scope-closure",
+    "script_text": "이번에는 스코프와 클로저를 배워볼게요. 스코프를 '변수가 보이는 범위'라고만 생각하시는 분들이 많은데, 더 정확하게는 '실행 컨텍스트(네임스페이스)'를 의미해요. Python은 LEGB 규칙으로 변수를 찾습니다.\n\nx = 'global'\n\ndef outer():\n    x = 'enclosing'\n    def inner():\n        x = 'local'\n        print(x)  # local (L)\n    inner()\n    print(x)  # enclosing (E)\n\nouter()\nprint(x)  # global (G)\n\nL은 Local, E는 Enclosing, G는 Global, B는 Built-in이에요. 안쪽에서 바깥쪽 순서로 찾아갑니다. 이제 클로저를 볼게요. 클로저는 외부 함수의 변수를 '기억'하는 내부 함수예요.\n\ndef make_multiplier(n):\n    def multiplier(x):\n        return x * n  # n을 기억!\n    return multiplier\n\ndouble = make_multiplier(2)\ntriple = make_multiplier(3)\nprint(double(5))  # 10\nprint(triple(5))  # 15\n\nmake_multiplier(2)가 끝나도 n=2는 사라지지 않아요. inner 함수가 참조하고 있으니까요. 이게 클로저의 핵심이에요. 클로저를 이해하면 데코레이터나 팩토리 패턴을 자연스럽게 활용할 수 있습니다."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 4,
+    "clip_title": "람다와 고차 함수",
+    "timestamp_start": "00:30:01",
+    "timestamp_end": "00:39:00",
+    "concept_id": "python-lambda",
+    "script_text": "마지막으로 람다와 고차 함수를 다뤄볼게요. 람다는 이름 없는 간단한 함수를 한 줄로 만드는 문법이에요.\n\n# 일반 함수\ndef square(x):\n    return x ** 2\n\n# 같은 기능의 람다\nsquare = lambda x: x ** 2\nprint(square(5))  # 25\n\n람다를 변수에 대입하는 건 권장되지 않아요. 진짜 활용처는 다른 함수의 인자로 넘길 때예요.\n\nstudents = [\n    {'name': '철수', 'score': 85},\n    {'name': '영희', 'score': 92},\n    {'name': '민수', 'score': 78},\n]\nby_score = sorted(students, key=lambda s: s['score'])\n\nmap()과 filter()도 고차 함수예요. 함수를 인자로 받는 함수를 고차 함수라고 합니다.\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\nevens = list(filter(lambda x: x % 2 == 0, numbers))\nprint(evens)  # [2, 4, 6, 8, 10]\n\n하지만 리스트 컴프리헨션이 더 읽기 좋은 경우가 많아요. evens = [x for x in numbers if x % 2 == 0] 이렇게요. 상황에 맞게 선택하세요."
+  }
+]

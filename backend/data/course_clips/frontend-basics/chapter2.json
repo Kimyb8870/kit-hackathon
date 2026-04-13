@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 2,
+    "clip_no": 1,
+    "clip_title": "선택자와 우선순위",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "css-selectors",
+    "script_text": "CSS는 HTML 요소의 모양을 결정하는 언어예요. 어떤 요소에 어떤 스타일을 적용할지 알려 주는 게 '선택자'입니다.\n\n가장 기본적인 세 가지부터 봅시다.\n\n/* 태그 선택자 */\np { color: gray; }\n\n/* 클래스 선택자 */\n.warning { color: red; }\n\n/* id 선택자 */\n#main-title { font-size: 32px; }\n\n선택자를 조합할 수도 있어요. ul li는 'ul 안의 모든 li'를 의미하고, ul > li는 'ul 바로 아래 li'만 가리킵니다. 사이의 띄어쓰기 차이로 의미가 달라지니 익숙해질 때까지 천천히 보세요.\n\n같은 요소에 여러 규칙이 적용되면 어떻게 될까요? CSS는 '우선순위(specificity)' 규칙으로 결정합니다. 대략적인 순서는 인라인 스타일 > id 선택자 > 클래스/속성 선택자 > 태그 선택자예요. 같은 우선순위라면 나중에 작성된 규칙이 이깁니다.\n\n초보자가 자주 만나는 함정이 !important예요. 우선순위 다툼에서 무조건 이기는 강력한 표시지만, 남발하면 디버깅이 정말 힘들어집니다. 다른 곳에서 또 !important를 쓰는 악순환이 생기거든요. 정말 마지막 수단으로만 쓰세요.\n\n실무에서는 클래스 선택자만 일관되게 쓰고, id는 자바스크립트용 식별자로만 쓰는 게 가장 깔끔합니다. 선택자가 단순해질수록 스타일을 예측하기 쉬워지고, 협업에서도 사고가 줄어요."
+  },
+  {
+    "chapter_no": 2,
+    "clip_no": 2,
+    "clip_title": "박스 모델",
+    "timestamp_start": "00:10:01",
+    "timestamp_end": "00:19:00",
+    "concept_id": "css-box-model",
+    "script_text": "CSS에서 모든 요소는 사각형 박스로 표현돼요. 박스는 네 겹으로 구성됩니다. 안쪽부터 차례로 content, padding, border, margin이에요.\n\n+--------- margin ---------+\n|  +------ border ------+  |\n|  |  +-- padding --+  |   |\n|  |  |   content   |  |   |\n|  |  +-------------+  |   |\n|  +--------------------+  |\n+--------------------------+\n\ncontent는 글자나 이미지가 들어가는 영역, padding은 내용과 테두리 사이의 여백, border는 테두리, margin은 다른 요소와의 바깥 여백입니다. 이 네 가지 개념만 잡혀도 레이아웃이 한결 명확해져요.\n\n.card {\n  width: 300px;\n  padding: 16px;\n  border: 1px solid #ddd;\n  margin: 24px;\n  background: #fff;\n}\n\n초보자가 자주 부딪히는 함정이 있어요. width: 300px; padding: 16px; border: 1px;을 합치면 실제 박스의 가로 폭이 얼마일까요? 기본 box-sizing 모델에서는 300 + 16*2 + 1*2 = 334px입니다. content만 300px이고 나머지는 그 바깥에 더해지기 때문이에요.\n\n이게 헷갈려서 모던 프로젝트는 거의 항상 다음 한 줄을 맨 위에 둡니다.\n\n* { box-sizing: border-box; }\n\nborder-box로 두면 width가 content가 아닌 'padding과 border까지 포함한 박스 전체'를 의미하게 돼요. 이렇게 하면 width 300px이 진짜 300px이 됩니다. 이 한 줄만 추가해 두면 레이아웃 짜는 머리 아픔이 절반으로 줄어요."
+  },
+  {
+    "chapter_no": 2,
+    "clip_no": 3,
+    "clip_title": "Flexbox와 Grid",
+    "timestamp_start": "00:19:01",
+    "timestamp_end": "00:30:00",
+    "concept_id": "css-flex-grid",
+    "script_text": "옛날에는 float이나 절대 위치 지정으로 레이아웃을 짰지만, 지금은 Flexbox와 Grid라는 두 도구만 알면 거의 모든 레이아웃을 만들 수 있어요. 각자 잘하는 영역이 다릅니다.\n\nFlexbox는 1차원 배치예요. 한 줄(가로) 또는 한 칸(세로)으로 정렬하는 데 강합니다. 메뉴 바, 카드 가로 정렬, 폼 레이블과 입력 정렬 같은 곳에 잘 어울려요.\n\n.menu {\n  display: flex;\n  justify-content: space-between; /* 양 끝 정렬 */\n  align-items: center;            /* 세로 가운데 */\n  gap: 16px;                      /* 자식 사이 간격 */\n}\n\njustify-content는 주축(가로) 정렬, align-items는 교차축(세로) 정렬이에요. gap은 자식 사이에 간격을 주는 새 표준 속성이고, 옛 코드에서 보던 margin 트릭을 대체해 줍니다.\n\nGrid는 2차원 레이아웃이에요. 행과 열을 동시에 정의해서 표 형태의 배치를 손쉽게 만듭니다.\n\n.layout {\n  display: grid;\n  grid-template-columns: 200px 1fr;  /* 사이드바 200, 본문은 남은 공간 */\n  grid-template-rows: auto 1fr auto; /* 헤더, 본문, 푸터 */\n  gap: 16px;\n  min-height: 100vh;\n}\n\n자식에는 grid-column이나 grid-row로 어디에 놓을지 지정할 수 있어요. 카드 그리드, 대시보드, 갤러리 같은 2차원 구조에 강합니다.\n\n둘을 골라 쓰는 기준은 단순해요. 한 줄 안에서 정렬한다면 Flex, 행과 열이 모두 의미가 있다면 Grid를 쓰면 됩니다. 두 도구를 자유자재로 다루면 디자이너가 어떤 레이아웃을 그려 와도 자신 있게 만들 수 있게 돼요."
+  }
+]

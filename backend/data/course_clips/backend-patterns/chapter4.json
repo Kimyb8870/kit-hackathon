@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 4,
+    "clip_no": 1,
+    "clip_title": "도메인 예외 설계",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "domain-exceptions",
+    "script_text": "예외를 어떻게 던지고 잡느냐는 코드의 품질을 크게 좌우합니다. 흔한 안티 패턴은 모든 곳에서 그냥 Exception을 raise하는 거예요. 그러면 호출하는 쪽에서 어떤 종류의 문제인지 구분할 수가 없습니다.\n\n도메인 예외는 '그 도메인에서 의미 있는 사건'을 클래스로 만든 것입니다. 이메일 중복, 잔액 부족, 권한 없음 같은 것들이죠.\n\nclass DomainError(Exception):\n    pass\n\nclass EmailAlreadyTaken(DomainError):\n    pass\n\nclass InsufficientFunds(DomainError):\n    def __init__(self, requested: int, available: int):\n        super().__init__(f'requested={requested}, available={available}')\n        self.requested = requested\n        self.available = available\n\n서비스 코드에서는 if문으로 분기하는 대신 적절한 예외를 던집니다. 예외에 필요한 정보를 담아 두면, 잡는 쪽에서 그걸 활용해 더 풍부한 에러 메시지를 만들 수 있어요.\n\n중요한 원칙은 '도메인 코드는 HTTPException 같은 프레젠테이션 개념을 모르도록' 한다는 점이에요. 서비스에서 HTTPException을 raise하면 그 서비스를 CLI나 배치에서 재사용할 수 없게 됩니다. 도메인은 도메인 예외를 던지고, 프레젠테이션 레이어에서 그 예외를 잡아 적절한 HTTP 상태 코드로 바꿔 주는 책임을 갖게 두세요. 이 작은 분리가 코드 재사용성을 크게 끌어올립니다."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 2,
+    "clip_title": "트랜잭션 경계 정의",
+    "timestamp_start": "00:10:01",
+    "timestamp_end": "00:20:30",
+    "concept_id": "transaction-boundary",
+    "script_text": "데이터베이스 트랜잭션을 어디서 시작하고 어디서 커밋할지는 의외로 까다로운 결정이에요. 너무 길게 잡으면 락이 오래 걸리고, 너무 짧게 잡으면 데이터가 어긋날 수 있거든요.\n\n실무에서 검증된 원칙은 '트랜잭션은 유스케이스 단위로 잡는다'입니다. 한 유스케이스의 모든 데이터 변경은 한 트랜잭션 안에서 일어나거나, 모두 일어나지 않아야 해요. 송금 유스케이스라면 출금과 입금이 같은 트랜잭션 안에 있어야 합니다. 그렇지 않으면 출금은 됐는데 입금이 안 되는 끔찍한 상황이 생길 수 있어요.\n\nclass TransferUseCase:\n    def execute(self, from_id, to_id, amount):\n        with self._uow:\n            sender = self._uow.accounts.get(from_id)\n            receiver = self._uow.accounts.get(to_id)\n            sender.withdraw(amount)\n            receiver.deposit(amount)\n            self._uow.accounts.save(sender)\n            self._uow.accounts.save(receiver)\n            self._uow.commit()\n\n여기서 _uow는 'Unit of Work'예요. with 블록이 시작될 때 트랜잭션이 열리고, commit이 호출되거나 예외 없이 블록을 빠져나가면 커밋, 예외가 나면 롤백되도록 만든 패턴입니다.\n\n주의할 점은 트랜잭션 안에서 외부 시스템(이메일 발송, 결제 API 호출)을 부르지 않는 거예요. 외부 시스템이 느리면 트랜잭션이 길어지고, 실패해도 롤백할 방법이 없습니다. 외부 시스템 호출은 트랜잭션이 끝난 뒤로 미루거나, 메시지 큐로 분리하는 게 안전합니다."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 3,
+    "clip_title": "재시도와 보상 트랜잭션",
+    "timestamp_start": "00:20:31",
+    "timestamp_end": "00:31:00",
+    "concept_id": "retry-compensation",
+    "script_text": "분산 환경에서는 모든 시스템이 항상 응답한다는 가정이 깨집니다. 네트워크가 끊기고, 외부 API가 느리고, 일시적으로 5xx를 돌려줘요. 이런 상황을 다루는 두 가지 도구가 재시도와 보상 트랜잭션입니다.\n\n재시도는 '실패한 작업을 다시 시도한다'는 단순한 아이디어지만, 잘못 쓰면 시스템에 더 큰 부담을 줍니다. 핵심 규칙 두 가지를 기억하세요. 첫째, 재시도는 멱등(idempotent)한 작업에만 적용합니다. 두 번 호출해도 같은 결과여야 안전해요. 둘째, 매번 같은 간격으로 다시 시도하면 폭주하기 쉬우니, 점점 간격을 늘리는 'exponential backoff'를 씁니다.\n\nimport time\nimport random\n\ndef call_with_retry(fn, max_attempts=5):\n    for attempt in range(max_attempts):\n        try:\n            return fn()\n        except TransientError:\n            if attempt == max_attempts - 1:\n                raise\n            sleep = (2 ** attempt) + random.random()\n            time.sleep(sleep)\n\n보상 트랜잭션은 '이미 성공한 작업을 사후에 되돌리는 동작'이에요. 결제는 성공했는데 배송 등록이 실패했다면, 결제를 자동으로 환불해 주는 게 보상입니다. 이 아이디어를 이어 붙이면 '사가(saga)' 패턴이 되는데, 분산 시스템의 일관성을 다루는 강력한 도구예요.\n\n핵심은 '실패는 정상적인 흐름의 일부'라고 받아들이는 마음가짐이에요. 실패를 예외 상황이 아니라 일상으로 보고 설계하면, 시스템이 훨씬 견고해집니다."
+  }
+]

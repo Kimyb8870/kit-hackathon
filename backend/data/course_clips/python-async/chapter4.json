@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 4,
+    "clip_no": 1,
+    "clip_title": "Lock과 Semaphore",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "async-lock",
+    "script_text": "비동기 코드는 단일 스레드라서 동시성 문제와 무관할 거라고 오해하기 쉬워요. 사실은 그렇지 않습니다. 한 작업이 await로 멈춘 사이에 다른 작업이 끼어들 수 있기 때문에, 공유 자원을 다룰 때는 여전히 동기화가 필요해요.\n\nasyncio.Lock은 '한 번에 한 task만 들어갈 수 있는 구역'을 만들어 줍니다.\n\nimport asyncio\n\nlock = asyncio.Lock()\nbalance = 0\n\nasync def deposit(amount):\n    global balance\n    async with lock:\n        current = balance\n        await asyncio.sleep(0)  # 일부러 양보\n        balance = current + amount\n\nasync def main():\n    await asyncio.gather(*(deposit(100) for _ in range(10)))\n    print(balance)  # 1000\n\nasyncio.run(main())\n\nLock이 없다면 각 task가 같은 current 값을 읽고 뒤덮어서 결과가 1000보다 작아질 수 있어요. async with lock 블록이 그 위험을 막아 줍니다.\n\nSemaphore는 Lock의 일반화예요. 동시에 몇 개까지 들어갈 수 있는지를 정합니다. 외부 API를 동시에 100번 호출하면 차단당할 수 있을 때, Semaphore(10)으로 동시 호출을 10개로 제한하는 식이에요.\n\nsem = asyncio.Semaphore(10)\n\nasync def safe_call(url):\n    async with sem:\n        return await http.get(url)\n\nLock과 Semaphore를 적절히 활용하면 비동기 코드가 통제 가능한 동시성을 갖게 됩니다. 무한히 빠른 게 좋은 게 아니라, 외부 시스템과 우리 자신을 보호할 수 있는 속도가 좋은 거예요."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 2,
+    "clip_title": "Queue와 생산자-소비자",
+    "timestamp_start": "00:10:01",
+    "timestamp_end": "00:20:00",
+    "concept_id": "async-queue",
+    "script_text": "비동기 작업을 한쪽에서 만들고 다른 쪽에서 처리하는 패턴, 즉 생산자-소비자 구조에는 asyncio.Queue가 잘 맞아요. Queue는 task끼리 안전하게 데이터를 주고받게 해 주는 통로입니다.\n\nimport asyncio\n\nasync def producer(queue):\n    for i in range(5):\n        await queue.put(i)\n        await asyncio.sleep(0.1)\n    await queue.put(None)  # 종료 신호\n\nasync def consumer(queue):\n    while True:\n        item = await queue.get()\n        if item is None:\n            queue.task_done()\n            break\n        print('processing', item)\n        await asyncio.sleep(0.3)\n        queue.task_done()\n\nasync def main():\n    queue = asyncio.Queue(maxsize=10)\n    await asyncio.gather(producer(queue), consumer(queue))\n\nasyncio.run(main())\n\n이 구조의 장점은 생산 속도와 소비 속도가 달라도 알아서 균형이 맞춰진다는 거예요. Queue에 maxsize를 두면, 큐가 가득 찼을 때 producer가 자동으로 멈춰서 소비자가 따라잡을 시간을 줍니다. 이걸 'backpressure'라고 부릅니다.\n\n실무에서는 한 명의 생산자와 여러 명의 소비자, 혹은 그 반대의 조합을 자주 만나게 돼요. 큐에 여러 consumer task를 띄워 두면 작업이 자동으로 분산됩니다. 메시지 큐 시스템(Kafka, RabbitMQ)을 다루기 전에 asyncio.Queue로 같은 발상을 미리 익혀 두면, 분산 큐를 만났을 때도 개념이 바로 연결돼요."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 3,
+    "clip_title": "취소와 타임아웃",
+    "timestamp_start": "00:20:01",
+    "timestamp_end": "00:30:00",
+    "concept_id": "async-cancel",
+    "script_text": "비동기 코드의 진짜 무기 중 하나가 취소(cancellation)예요. 동기 코드에서는 한 번 시작한 작업을 중간에 중단하기가 정말 어렵잖아요. 비동기 task는 다릅니다. cancel() 메서드 한 번이면 안전하게 중단할 수 있어요.\n\nasync def slow_task():\n    try:\n        await asyncio.sleep(10)\n        return 'done'\n    except asyncio.CancelledError:\n        print('cleaning up')\n        raise\n\nasync def main():\n    task = asyncio.create_task(slow_task())\n    await asyncio.sleep(1)\n    task.cancel()\n    try:\n        await task\n    except asyncio.CancelledError:\n        print('task was cancelled')\n\nasyncio.run(main())\n\ncancel을 호출하면 task 안의 await 지점에서 CancelledError가 발생합니다. try-finally나 except 블록에서 자원을 정리할 기회가 생기고, 그다음 예외가 위로 전파돼요. CancelledError를 잡아서 무시해 버리면 안 됩니다. 다시 raise해서 호출자에게 취소 사실을 알려야 해요.\n\n타임아웃도 같은 원리 위에 세워져 있어요. asyncio.wait_for나 asyncio.timeout 컨텍스트 매니저를 쓰면 정해진 시간 안에 작업이 끝나지 않을 때 자동으로 CancelledError를 던져 줍니다.\n\nasync def main():\n    try:\n        async with asyncio.timeout(1):\n            await slow_task()\n    except asyncio.TimeoutError:\n        print('timed out')\n\n외부 시스템과 대화하는 모든 비동기 호출에는 항상 타임아웃을 걸어 두세요. 응답하지 않는 한 줄이 전체 시스템을 멈추게 만들 수 있습니다. 취소와 타임아웃을 적극적으로 활용하면 비동기 코드가 작은 사고에도 굳건하게 버티는 시스템이 됩니다."
+  }
+]

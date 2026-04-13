@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 1,
+    "clip_no": 1,
+    "clip_title": "EC2 인스턴스의 기본 개념",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "aws-ec2-basics",
+    "script_text": "EC2는 Elastic Compute Cloud의 약자로, AWS에서 가상 서버를 몇 분 만에 띄울 수 있게 해주는 서비스입니다. 실제 물리 서버를 빌리는 대신 필요할 때 올리고, 필요 없으면 내리는 사용량 기반 과금 방식이에요.\n\nEC2 인스턴스를 만들 때 선택해야 하는 핵심 요소는 다섯 가지입니다. AMI(운영체제 이미지), 인스턴스 타입(CPU/메모리 조합), 키 페어(SSH 접속용), 보안 그룹(방화벽 규칙), 그리고 스토리지(EBS 볼륨). 이 다섯 가지만 이해해도 기본 설정은 끝납니다.\n\n시험에서 자주 나오는 건 인스턴스 타입 분류입니다. t3는 범용, m5는 균형, c5는 컴퓨팅 최적화, r5는 메모리 최적화예요. 개발용 저렴한 워크로드는 t3, 일반 웹 애플리케이션은 m5, 고성능 연산은 c5, 인메모리 캐시나 DB는 r5를 기본 후보로 두면 됩니다. 이 매핑을 확실히 외워두면 시나리오 문제에서 헷갈리지 않아요."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 2,
+    "clip_title": "S3 버킷과 스토리지 클래스",
+    "timestamp_start": "00:10:00",
+    "timestamp_end": "00:20:00",
+    "concept_id": "aws-s3-bucket",
+    "script_text": "S3는 Simple Storage Service로, 사실상 무제한 저장 공간을 제공하는 객체 스토리지입니다. 파일을 '객체'라는 단위로 '버킷' 안에 저장하는 구조예요. 버킷 이름은 전 세계에서 유일해야 하고, 한 번 만들면 이름을 바꿀 수 없습니다.\n\nS3에서 가장 중요한 건 스토리지 클래스 선택입니다. Standard는 자주 접근하는 데이터, Intelligent-Tiering은 접근 패턴을 모를 때, Standard-IA는 월 몇 번만 접근하는 데이터, Glacier는 아카이브, Glacier Deep Archive는 거의 꺼내지 않는 장기 보관용이에요. 가격 차이가 최대 20배까지 나기 때문에 맞게 고르는 것만으로도 비용이 크게 줄어듭니다.\n\n버킷을 만들 때는 기본적으로 퍼블릭 접근이 차단되어 있어요. 이걸 실수로 풀면 유명한 S3 유출 사고의 원인이 됩니다. 특별한 이유가 없다면 Block Public Access를 그대로 두고, 필요한 경우에만 CloudFront나 presigned URL로 노출하는 게 원칙입니다."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 3,
+    "clip_title": "IAM 정책과 역할의 차이",
+    "timestamp_start": "00:20:00",
+    "timestamp_end": "00:30:00",
+    "concept_id": "aws-iam-policy",
+    "script_text": "IAM은 Identity and Access Management로, AWS 안에서 누가 무엇을 할 수 있는지를 관리하는 서비스입니다. 시험에서도 실무에서도 가장 헷갈리는 개념이 User, Group, Role, Policy의 차이예요.\n\nUser는 실제 사람이나 애플리케이션 계정입니다. Group은 User들을 묶는 단위고요. Policy는 '무엇을 허용할지'를 JSON으로 정의한 규칙입니다. 그리고 Role은 임시로 권한을 빌려 쓰는 수단이에요. EC2 인스턴스가 S3에 접근해야 한다면 EC2에 IAM Role을 붙입니다. User의 access key를 서버에 심는 건 보안상 잘못된 관행이에요.\n\nPolicy를 작성할 때는 최소 권한 원칙을 지켜야 합니다. '*' 와일드카드는 정말 필요할 때만 쓰세요. 'Effect: Allow, Action: s3:GetObject, Resource: arn:aws:s3:::my-bucket/*' 처럼 구체적으로 지정하는 습관이 보안 사고를 막습니다. 시험에서도 지나치게 넓은 권한을 주는 선택지는 거의 항상 오답입니다."
+  }
+]

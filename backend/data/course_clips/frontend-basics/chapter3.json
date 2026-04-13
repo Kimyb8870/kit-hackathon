@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 3,
+    "clip_no": 1,
+    "clip_title": "변수와 타입",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:09:30",
+    "concept_id": "js-variables",
+    "script_text": "JavaScript는 브라우저에서 페이지를 살아 움직이게 하는 언어예요. 첫 걸음은 변수와 타입이에요.\n\nJavaScript에는 변수를 선언하는 키워드가 세 개 있습니다. var, let, const예요. 결론부터 말하면 const를 기본으로 쓰고, 값이 바뀌어야만 let을 쓰세요. var는 옛 키워드라서 새 코드에서는 거의 쓰지 않습니다.\n\nconst pi = 3.14;\nlet count = 0;\ncount = count + 1;\n\nconst와 let의 가장 큰 차이는 '재할당이 가능한가'예요. const로 선언한 변수에는 다시 다른 값을 넣을 수 없습니다. 단, 객체나 배열을 const로 선언했을 때 그 안의 내용은 바꿀 수 있어요. 헷갈리기 쉬운 부분이라 기억해 두세요.\n\n타입은 크게 원시 타입과 객체로 나뉩니다. 원시 타입은 number, string, boolean, null, undefined, symbol, bigint 일곱 가지예요. 그 외의 모든 것(배열, 객체, 함수)은 객체입니다.\n\ntypeof 1            // 'number'\ntypeof 'hello'      // 'string'\ntypeof true         // 'boolean'\ntypeof undefined    // 'undefined'\ntypeof null         // 'object'  ← 유명한 함정\ntypeof [1, 2]       // 'object'\ntypeof function(){} // 'function'\n\ntypeof null이 'object'를 돌려주는 건 언어 초창기부터 내려온 버그인데, 호환성 때문에 고치지 않은 거예요. null 체크는 typeof 대신 value === null로 하는 게 정확합니다."
+  },
+  {
+    "chapter_no": 3,
+    "clip_no": 2,
+    "clip_title": "함수와 화살표 함수",
+    "timestamp_start": "00:09:31",
+    "timestamp_end": "00:19:30",
+    "concept_id": "js-functions",
+    "script_text": "JavaScript에서 함수는 일급 시민이에요. 변수에 담을 수도 있고, 다른 함수에 인자로 넘길 수도 있고, 함수에서 함수를 돌려받을 수도 있습니다.\n\n함수를 정의하는 두 가지 방식이 있어요. function 키워드와 화살표(=>) 표현식입니다.\n\n// function 선언\nfunction add(a, b) {\n  return a + b;\n}\n\n// 함수 표현식 (화살표)\nconst multiply = (a, b) => a * b;\n\n// 본문이 여러 줄이면 중괄호와 return\nconst greet = (name) => {\n  const message = `안녕, ${name}`;\n  return message;\n};\n\n화살표 함수는 코드가 짧다는 점 외에 중요한 특징이 하나 더 있어요. this 키워드를 자기 스스로 만들지 않고, 둘러싼 함수의 this를 그대로 물려받는다는 점입니다. 객체 메서드 안에서 setTimeout 콜백을 쓸 때 this가 사라지는 함정이 있는데, 화살표 함수를 쓰면 자연스럽게 해결돼요.\n\n인자를 받을 때는 기본값과 구조 분해를 많이 씁니다.\n\nfunction createUser({ name, age = 20 }) {\n  return { name, age, createdAt: Date.now() };\n}\n\ncreateUser({ name: 'Ari' });            // age는 20\ncreateUser({ name: 'Bo', age: 30 });    // age는 30\n\n객체를 받아서 그 안의 필드를 바로 변수로 꺼내는 패턴은 React를 비롯한 모던 프론트엔드 코드 곳곳에서 만나게 됩니다. 한 번 익히면 자주 쓰게 될 거예요."
+  },
+  {
+    "chapter_no": 3,
+    "clip_no": 3,
+    "clip_title": "배열과 객체",
+    "timestamp_start": "00:19:31",
+    "timestamp_end": "00:29:00",
+    "concept_id": "js-objects",
+    "script_text": "JavaScript에서 데이터는 대부분 배열 아니면 객체예요. 두 자료구조에 익숙해지면 거의 모든 일을 할 수 있습니다.\n\n배열은 순서가 있는 값의 묶음이에요.\n\nconst names = ['Ari', 'Bo', 'Ce'];\nnames.push('Di');         // 끝에 추가\nnames.length;             // 4\nnames[0];                 // 'Ari'\n\n배열을 다룰 때 자주 쓰는 메서드가 map, filter, reduce예요. 이걸 익히면 for문을 쓰는 일이 확 줄어듭니다.\n\nconst numbers = [1, 2, 3, 4, 5];\nconst doubled = numbers.map(n => n * 2);            // [2, 4, 6, 8, 10]\nconst evens = numbers.filter(n => n % 2 === 0);     // [2, 4]\nconst sum = numbers.reduce((acc, n) => acc + n, 0); // 15\n\n객체는 키-값 쌍의 묶음이에요.\n\nconst user = {\n  name: 'Ari',\n  age: 20,\n  greet() {\n    return `안녕, 나는 ${this.name}`;\n  }\n};\n\nconsole.log(user.name);     // 점 표기법\nconsole.log(user['age']);   // 대괄호 표기법\nuser.email = 'ari@example.com'; // 새 필드 추가\n\n객체를 복사할 때는 그냥 대입하면 같은 객체를 가리키게 돼요. 진짜 새 객체를 만들고 싶으면 스프레드 연산자(...)를 씁니다.\n\nconst userV2 = { ...user, age: 21 };\n\n이렇게 하면 user는 그대로 두고, age만 21로 바뀐 새 객체가 만들어져요. React 같은 프레임워크에서 상태를 안전하게 갱신할 때 핵심이 되는 패턴입니다. 원본을 망가뜨리지 않고 새 값을 만든다는 사고방식, 처음부터 들이기를 강력히 권합니다."
+  }
+]

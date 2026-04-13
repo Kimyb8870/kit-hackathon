@@ -1,0 +1,164 @@
+{
+  "eval_set": [
+    {
+      "id": "eval-001",
+      "category": "basic_retrieval",
+      "question": "Python에서 변수는 어떤 방식으로 값을 참조하나요?",
+      "expected_concept_id": "python-variables",
+      "expected_clip": "Python이란 무엇인가?",
+      "expected_keywords": ["이름표", "label", "객체", "참조"]
+    },
+    {
+      "id": "eval-002",
+      "category": "basic_retrieval",
+      "question": "range(5)는 어떤 숫자들을 생성하나요?",
+      "expected_concept_id": "python-for-loop",
+      "expected_clip": "for 반복문",
+      "expected_keywords": ["0", "1", "2", "3", "4"]
+    },
+    {
+      "id": "eval-003",
+      "category": "basic_retrieval",
+      "question": "리스트 컴프리헨션은 어떻게 작성하나요?",
+      "expected_concept_id": "python-list",
+      "expected_clip": "리스트와 리스트 컴프리헨션",
+      "expected_keywords": ["컴프리헨션", "for", "in", "대괄호"]
+    },
+    {
+      "id": "eval-004",
+      "category": "basic_retrieval",
+      "question": "Python에서 클로저란 무엇인가요?",
+      "expected_concept_id": "python-scope-closure",
+      "expected_clip": "스코프와 클로저",
+      "expected_keywords": ["외부 함수", "기억", "네임스페이스", "LEGB"]
+    },
+    {
+      "id": "eval-005",
+      "category": "basic_retrieval",
+      "question": "딕셔너리에서 안전하게 값을 가져오는 방법은?",
+      "expected_concept_id": "python-tuple-dict",
+      "expected_clip": "튜플과 딕셔너리",
+      "expected_keywords": ["get", "default", "KeyError"]
+    },
+    {
+      "id": "eval-006",
+      "category": "basic_retrieval",
+      "question": "__init__ 메서드의 역할은 무엇인가요?",
+      "expected_concept_id": "python-class",
+      "expected_clip": "클래스와 객체",
+      "expected_keywords": ["초기화", "self", "인스턴스"]
+    },
+    {
+      "id": "eval-007",
+      "category": "basic_retrieval",
+      "question": "while True 루프는 어떤 상황에서 사용하나요?",
+      "expected_concept_id": "python-while-loop",
+      "expected_clip": "while 반복문과 제어문",
+      "expected_keywords": ["입력", "서버", "break", "게임"]
+    },
+    {
+      "id": "eval-008",
+      "category": "basic_retrieval",
+      "question": "super()는 언제 사용하나요?",
+      "expected_concept_id": "python-inheritance",
+      "expected_clip": "상속과 다형성",
+      "expected_keywords": ["부모", "클래스", "MRO", "상속"]
+    },
+    {
+      "id": "eval-009",
+      "category": "basic_retrieval",
+      "question": "try-except 구문에서 finally의 역할은?",
+      "expected_concept_id": "python-conditionals",
+      "expected_clip": "예외 처리 try-except",
+      "expected_keywords": ["항상 실행", "리소스", "정리"]
+    },
+    {
+      "id": "eval-010",
+      "category": "basic_retrieval",
+      "question": "lambda 함수는 어떤 경우에 유용한가요?",
+      "expected_concept_id": "python-functions",
+      "expected_clip": "람다와 고차 함수",
+      "expected_keywords": ["이름 없는", "sorted", "key", "map"]
+    },
+    {
+      "id": "eval-011",
+      "category": "misconception",
+      "question": "변수는 값을 담는 상자 아닌가요?",
+      "expected_concept_id": "python-variables",
+      "expected_clip": "Python이란 무엇인가?",
+      "expected_keywords": ["이름표", "참조", "상자 아님", "객체"]
+    },
+    {
+      "id": "eval-012",
+      "category": "misconception",
+      "question": "==과 is는 같은 건가요?",
+      "expected_concept_id": "python-conditionals",
+      "expected_clip": "조건문 if-elif-else",
+      "expected_keywords": ["값 비교", "정체성", "identity", "None"]
+    },
+    {
+      "id": "eval-013",
+      "category": "misconception",
+      "question": "return이 없는 함수는 아무것도 반환하지 않는 거죠?",
+      "expected_concept_id": "python-functions",
+      "expected_clip": "함수 정의와 호출",
+      "expected_keywords": ["None", "반환", "암묵적"]
+    },
+    {
+      "id": "eval-014",
+      "category": "misconception",
+      "question": "상속은 코드를 재사용하기 위한 것 아닌가요?",
+      "expected_concept_id": "python-inheritance",
+      "expected_clip": "상속과 다형성",
+      "expected_keywords": ["is-a", "합성", "composition"]
+    },
+    {
+      "id": "eval-015",
+      "category": "misconception",
+      "question": "튜플은 그냥 수정 못하는 리스트 아닌가요?",
+      "expected_concept_id": "python-tuple-dict",
+      "expected_clip": "튜플과 딕셔너리",
+      "expected_keywords": ["레코드", "해시", "불변", "의미론"]
+    },
+    {
+      "id": "eval-016",
+      "category": "cross_concept",
+      "question": "리스트를 함수에 전달하면 원본이 바뀌는 이유가 뭔가요?",
+      "expected_concept_id": "python-variables",
+      "expected_clip": "Python이란 무엇인가?",
+      "expected_keywords": ["참조", "가변", "이름표", "같은 객체"]
+    },
+    {
+      "id": "eval-017",
+      "category": "cross_concept",
+      "question": "클래스에서 리스트를 클래스 변수로 선언하면 인스턴스끼리 공유되나요?",
+      "expected_concept_id": "python-class",
+      "expected_clip": "클래스와 객체",
+      "expected_keywords": ["클래스 변수", "인스턴스 변수", "공유", "가변"]
+    },
+    {
+      "id": "eval-018",
+      "category": "cross_concept",
+      "question": "for 루프에서 딕셔너리의 키와 값을 동시에 가져오려면?",
+      "expected_concept_id": "python-for-loop",
+      "expected_clip": "for 반복문",
+      "expected_keywords": ["items", "enumerate", "키", "값"]
+    },
+    {
+      "id": "eval-019",
+      "category": "cross_concept",
+      "question": "함수 안에서 전역 변수를 수정하려면 어떻게 해야 하나요?",
+      "expected_concept_id": "python-scope-closure",
+      "expected_clip": "스코프와 클로저",
+      "expected_keywords": ["global", "LEGB", "네임스페이스"]
+    },
+    {
+      "id": "eval-020",
+      "category": "cross_concept",
+      "question": "상속받은 클래스에서 부모의 __init__을 호출하지 않으면 어떻게 되나요?",
+      "expected_concept_id": "python-inheritance",
+      "expected_clip": "상속과 다형성",
+      "expected_keywords": ["super", "__init__", "초기화", "속성"]
+    }
+  ]
+}

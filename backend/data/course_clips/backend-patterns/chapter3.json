@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 3,
+    "clip_no": 1,
+    "clip_title": "비즈니스 로직의 위치",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "service-layer",
+    "script_text": "비즈니스 로직을 어디에 두느냐는 백엔드 설계의 핵심 질문 중 하나예요. 대답이 둘 중 하나로 갈리거든요. '컨트롤러에 둘까, 모델에 둘까, 아니면 따로 서비스 클래스를 만들까?'\n\n초보 단계에서는 컨트롤러(라우터 함수)에 다 넣는 일이 많아요. 짧은 프로젝트라면 그것도 괜찮습니다. 하지만 같은 규칙이 두 군데 이상에서 필요해지는 순간 문제가 시작돼요. 송금 한도 검사를 일반 송금 API와 자동이체 API 양쪽에서 똑같이 해야 한다고 생각해 보세요. 한 곳만 고치면 다른 곳에 버그가 새로 생깁니다.\n\n그래서 서비스 레이어를 따로 두는 거예요. 서비스는 '도메인 동작 단위'를 책임집니다.\n\nclass TransferService:\n    def __init__(self, accounts, ledger, notifier):\n        self._accounts = accounts\n        self._ledger = ledger\n        self._notifier = notifier\n    def transfer(self, from_id, to_id, amount):\n        sender = self._accounts.get(from_id)\n        receiver = self._accounts.get(to_id)\n        sender.withdraw(amount)\n        receiver.deposit(amount)\n        self._accounts.save(sender)\n        self._accounts.save(receiver)\n        self._ledger.record(from_id, to_id, amount)\n        self._notifier.notify_transfer(from_id, to_id, amount)\n\n어떤 진입점(HTTP, CLI, 스케줄러)에서든 이 한 메서드만 부르면 송금이 동일하게 동작합니다. 서비스 레이어는 '비즈니스 규칙의 단일 진실 출처'예요. 같은 규칙이 두 번 등장한 코드를 발견하면, 서비스로 옮길 때가 됐다는 신호입니다."
+  },
+  {
+    "chapter_no": 3,
+    "clip_no": 2,
+    "clip_title": "트랜잭션 스크립트와 도메인 모델",
+    "timestamp_start": "00:10:01",
+    "timestamp_end": "00:21:00",
+    "concept_id": "transaction-script",
+    "script_text": "비즈니스 로직을 표현하는 방법에는 크게 두 가지 흐름이 있어요. 트랜잭션 스크립트와 도메인 모델입니다.\n\n트랜잭션 스크립트는 한 메서드 안에서 절차적으로 'A를 하고 → B를 하고 → C를 한다'를 쭉 적어 내려가는 스타일이에요. 직관적이고 빠르게 시작할 수 있어서, 단순한 CRUD 위주의 서비스에 잘 어울립니다.\n\ndef cancel_order(order_id, repo, payments):\n    order = repo.get(order_id)\n    if order.status != 'paid':\n        raise OrderNotCancellable()\n    payments.refund(order.payment_id, order.total)\n    order.status = 'canceled'\n    repo.save(order)\n\n도메인 모델 스타일은 데이터와 행동을 객체 안에 함께 묶습니다. order.cancel() 같은 메서드가 객체 자기 자신에게 있고, 서비스는 'order를 가져와서 cancel을 부른다'는 얇은 흐름만 책임져요.\n\nclass Order:\n    def cancel(self):\n        if self.status != 'paid':\n            raise OrderNotCancellable()\n        self.status = 'canceled'\n        return RefundRequest(self.payment_id, self.total)\n\nclass CancelOrderService:\n    def execute(self, order_id):\n        order = self._orders.get(order_id)\n        refund = order.cancel()\n        self._payments.refund(refund.payment_id, refund.total)\n        self._orders.save(order)\n\n도메인 모델이 더 우아해 보이지만 항상 정답은 아니에요. 규칙이 단순한 영역에서는 트랜잭션 스크립트가 더 빠르고 읽기 쉽고, 규칙이 깊고 복잡한 핵심 도메인에서는 도메인 모델이 빛을 발합니다. 프로젝트 안에서도 영역마다 두 스타일을 섞어 쓰는 게 보통이에요."
+  },
+  {
+    "chapter_no": 3,
+    "clip_no": 3,
+    "clip_title": "유스케이스 모델링",
+    "timestamp_start": "00:21:01",
+    "timestamp_end": "00:31:00",
+    "concept_id": "use-case",
+    "script_text": "유스케이스라는 단어를 들으면 '사용자가 시스템을 어떻게 쓰는가'가 머리에 떠오르죠. 코드에서도 똑같이 쓸 수 있어요. 하나의 유스케이스를 하나의 클래스로 표현하는 거예요.\n\nclass RegisterUser:\n    def __init__(self, users: UserRepository, mailer: Mailer):\n        self._users = users\n        self._mailer = mailer\n    def execute(self, name: str, email: str, password: str) -> User:\n        if self._users.get_by_email(email):\n            raise EmailAlreadyTaken()\n        user = User.create(name=name, email=email, password=password)\n        self._users.save(user)\n        self._mailer.send_welcome(user.email)\n        return user\n\nRegisterUser, CancelOrder, ApprovePayment처럼 동사 + 명사 형태로 이름을 짓고, execute 한 메서드가 그 시나리오의 시작과 끝을 책임집니다. 이렇게 하면 코드를 여는 것만으로도 '아, 이게 사용자 등록 유스케이스구나' 하고 바로 알 수 있어요.\n\n유스케이스 단위로 쪼개면 의존성도 자연스럽게 작아집니다. 한 클래스가 너무 많은 의존성을 받기 시작하면 그 자체가 위험 신호예요. '이 유스케이스는 너무 많은 일을 하고 있다'는 뜻이거든요. 그럴 때는 두 개로 나누거나, 더 작은 도메인 객체로 책임을 옮길 시점입니다.\n\n유스케이스 중심 설계의 가장 큰 장점은 '코드와 사람이 같은 언어를 쓰게 된다'는 거예요. 기획자가 말하는 '결제 환불'이 코드 속 RefundPayment 클래스로 그대로 매핑되면, 의사소통 비용이 확 줄어듭니다."
+  }
+]

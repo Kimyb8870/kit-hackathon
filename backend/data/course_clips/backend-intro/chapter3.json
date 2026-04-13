@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 3,
+    "clip_no": 1,
+    "clip_title": "관계형 데이터베이스 개념",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:09:30",
+    "concept_id": "rdbms-basics",
+    "script_text": "백엔드는 결국 데이터를 다루는 일이고, 그 데이터를 안전하게 보관하는 곳이 데이터베이스예요. 가장 널리 쓰이는 형태가 '관계형 데이터베이스'입니다. PostgreSQL, MySQL, SQLite 같은 게 모두 여기에 속해요.\n\n관계형 데이터베이스의 핵심은 '테이블'이에요. 테이블은 엑셀 시트와 비슷하게 행과 열로 이루어져 있습니다. 열은 어떤 종류의 데이터인지(이름, 나이, 이메일 같은 것), 행은 실제 한 건의 데이터를 의미해요.\n\n그리고 '관계'라는 단어가 붙은 이유는, 테이블끼리 서로 연결될 수 있기 때문입니다. 예를 들어 users 테이블과 posts 테이블이 있을 때, posts에 user_id 컬럼을 두면 '이 게시글은 누가 썼는지'를 표현할 수 있어요. 이걸 외래 키(foreign key)라고 합니다.\n\nusers 테이블\nid | name | email\n1  | Ari  | ari@example.com\n2  | Bo   | bo@example.com\n\nposts 테이블\nid | user_id | title\n1  | 1       | 첫 글\n2  | 1       | 두 번째 글\n3  | 2       | Bo의 글\n\n데이터가 이런 식으로 정리되어 있으면 중복이 줄고, 한 곳만 고치면 전체가 일관되게 유지됩니다. 이 정리 원칙을 '정규화'라고 부르며, 백엔드 개발자가 평생 함께 가는 개념이에요."
+  },
+  {
+    "chapter_no": 3,
+    "clip_no": 2,
+    "clip_title": "SQL 기본 쿼리",
+    "timestamp_start": "00:09:31",
+    "timestamp_end": "00:20:00",
+    "concept_id": "sql-queries",
+    "script_text": "데이터베이스에 명령을 내리는 언어가 SQL입니다. 'Structured Query Language'의 약자이고, 영어 문장처럼 읽히도록 디자인되었어요.\n\n가장 자주 쓰는 네 가지부터 익혀 봅시다. 데이터를 가져오는 SELECT, 추가하는 INSERT, 수정하는 UPDATE, 삭제하는 DELETE입니다. 머리글자만 따서 'CRUD'라고 부르기도 해요.\n\n-- 모든 사용자 조회\nSELECT * FROM users;\n\n-- 이름이 'Ari'인 사용자만\nSELECT id, email FROM users WHERE name = 'Ari';\n\n-- 새 사용자 추가\nINSERT INTO users (name, email) VALUES ('Ce', 'ce@example.com');\n\n-- 이메일 변경\nUPDATE users SET email = 'new@example.com' WHERE id = 3;\n\n-- 사용자 삭제\nDELETE FROM users WHERE id = 3;\n\nWHERE 절이 빠진 UPDATE나 DELETE는 정말 위험합니다. WHERE를 빼면 테이블 전체에 적용되어 모든 행이 바뀌거나 사라져요. 실무에서 흔한 사고 중 하나이니 손이 떨릴 정도로 조심하세요.\n\n여러 테이블을 합쳐서 보고 싶을 땐 JOIN을 씁니다.\n\nSELECT users.name, posts.title\nFROM users\nJOIN posts ON posts.user_id = users.id;\n\n이 한 줄로 '누가 어떤 글을 썼는지'를 한 화면에서 볼 수 있어요. JOIN은 처음에는 어렵게 느껴지지만 익숙해지면 SQL의 진짜 힘을 체감할 수 있는 도구입니다."
+  },
+  {
+    "chapter_no": 3,
+    "clip_no": 3,
+    "clip_title": "SQLAlchemy ORM 입문",
+    "timestamp_start": "00:20:01",
+    "timestamp_end": "00:31:00",
+    "concept_id": "sqlalchemy-basics",
+    "script_text": "SQL을 매번 문자열로 직접 짜는 건 실수가 많고 번거로워요. 그래서 ORM(Object-Relational Mapper)을 씁니다. ORM은 '데이터베이스 테이블을 Python 클래스처럼 다루게 해 주는 도구'예요. Python 진영에서 가장 유명한 ORM이 SQLAlchemy입니다.\n\n사용 흐름은 이렇습니다. 먼저 모델 클래스를 정의해요.\n\nfrom sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column\n\nclass Base(DeclarativeBase):\n    pass\n\nclass User(Base):\n    __tablename__ = 'users'\n    id: Mapped[int] = mapped_column(primary_key=True)\n    name: Mapped[str]\n    email: Mapped[str]\n\n그런 다음 세션을 통해 데이터를 다룹니다.\n\nuser = User(name='Ari', email='ari@example.com')\nsession.add(user)\nsession.commit()\n\nfound = session.query(User).filter_by(name='Ari').first()\n\nORM의 진짜 매력은 객체로 다룬다는 점이에요. found.name, found.email처럼 평범한 속성 접근으로 데이터를 읽고 쓸 수 있죠. SQL을 알아야 할 필요가 사라지는 건 아니지만, 일상적인 작업에서는 코드가 훨씬 짧고 안전해집니다.\n\n다만 ORM이 만든 SQL이 마음에 들지 않는 경우가 있어요. 그럴 땐 print(query) 같은 방법으로 실제 어떤 SQL이 만들어졌는지 확인하고, 필요하면 더 명시적으로 짜는 식으로 균형을 잡으면 됩니다."
+  }
+]

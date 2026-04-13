@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 1,
+    "clip_no": 1,
+    "clip_title": "단일 책임 원칙과 컴포넌트",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:12:00",
+    "concept_id": "react-component-basics",
+    "script_text": "React 컴포넌트를 설계할 때 가장 먼저 지켜야 할 건 단일 책임 원칙입니다. 하나의 컴포넌트는 하나의 목적만 가져야 해요. 예를 들어 UserCard 컴포넌트가 프로필을 보여주는 동시에 구독 버튼 로직까지 담고 있으면, 나중에 구독 로직을 바꿀 때 UserCard 전체가 흔들립니다.\n\n실무에서는 함수형 컴포넌트를 기본으로 씁니다.\n\nfunction Button({ label, onClick }) {\n  return <button onClick={onClick}>{label}</button>;\n}\n\n이렇게 작게 쪼갠 컴포넌트를 조합해 복잡한 UI를 만듭니다. 재사용성이 떨어진다면 의존성이 너무 많거나 책임이 섞였다는 신호예요. 컴포넌트 크기가 커지기 시작하면 '이 안에서 몇 가지 일을 하고 있나' 스스로 질문해 보세요."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 2,
+    "clip_title": "useState로 상태 관리하기",
+    "timestamp_start": "00:12:00",
+    "timestamp_end": "00:22:00",
+    "concept_id": "react-usestate",
+    "script_text": "useState는 React의 가장 기본적인 Hook입니다. 함수형 컴포넌트 안에서 컴포넌트 고유의 상태를 보관할 수 있게 해줘요.\n\nconst [count, setCount] = useState(0);\n\n이렇게 선언하면 count는 현재 값, setCount는 값을 교체하는 함수입니다. 중요한 건 setCount(count + 1)가 즉시 count를 바꾸지 않는다는 점이에요. React는 렌더링이 끝난 뒤에 새 상태로 다시 렌더링합니다. 그래서 같은 렌더 안에서 count를 여러 번 바꾸려면 함수형 업데이트를 써야 합니다.\n\nsetCount(prev => prev + 1);\n\n상태 업데이트는 불변하게 해야 합니다. 객체나 배열을 직접 수정하지 말고 새 객체를 만들어 넘기세요. 이렇게 해야 React가 변화를 감지해 리렌더링합니다."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 3,
+    "clip_title": "Props 설계 가이드",
+    "timestamp_start": "00:22:00",
+    "timestamp_end": "00:32:00",
+    "concept_id": "react-props",
+    "script_text": "Props는 부모 컴포넌트가 자식에게 넘기는 읽기 전용 데이터입니다. 자식 쪽에서 props를 직접 수정하면 안 돼요. 데이터 흐름이 한쪽으로만 흘러야 디버깅이 쉬워집니다.\n\n좋은 Props 설계의 핵심은 '필요한 만큼만' 받는 것입니다. 컴포넌트가 10개의 props를 받는다면 책임이 너무 많다는 신호예요. 자식이 부모의 상태를 바꿔야 할 때는 콜백 함수를 props로 전달합니다.\n\nfunction TodoList({ todos, onToggle }) {\n  return todos.map(t => (\n    <Todo key={t.id} todo={t} onToggle={() => onToggle(t.id)} />\n  ));\n}\n\n또 하나, boolean props 이름은 긍정형으로 짓는 게 좋습니다. isDisabled보다 disabled, hasError보다 error 같은 식이죠. 그래야 사용처에서 <Button disabled />처럼 자연스럽게 읽힙니다."
+  }
+]

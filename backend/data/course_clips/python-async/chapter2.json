@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 2,
+    "clip_no": 1,
+    "clip_title": "이벤트 루프 개념",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "event-loop",
+    "script_text": "비동기 프로그래밍을 이해하려면 이벤트 루프부터 그릴 줄 알아야 해요. 이벤트 루프는 '해야 할 일을 계속 돌아가며 처리하는 단일 스레드 스케줄러'라고 생각하면 됩니다.\n\n실생활 비유를 해 볼게요. 한 명의 직원이 카페 카운터에서 일한다고 상상해 봅시다. 손님 A가 주문을 하면 직원은 에스프레소 머신에 원두를 넣고 추출 버튼을 누른 다음, 추출이 끝나기를 멍하니 기다리는 게 아니라 손님 B의 주문을 받으러 갑니다. 추출이 끝나면 다시 돌아와서 손님 A의 컵에 부어 주죠.\n\n이벤트 루프가 정확히 이런 일을 해요. 'I/O를 기다려야 하는 작업'이 생기면 그 작업을 큐에 넣어 두고, 다른 처리할 일을 계속 진행합니다. I/O가 준비되면 멈춰 둔 작업을 깨워서 이어서 실행하죠.\n\n이벤트 루프의 강점은 스레드를 추가로 만들지 않고도 수천 개의 동시 연결을 처리할 수 있다는 점이에요. 단점은 작업 하나가 CPU를 오래 쥐고 놓지 않으면 다른 모든 작업이 멈춘다는 것입니다. 그래서 이벤트 루프 안에서는 무거운 계산을 직접 돌리지 말고, 별도 프로세스나 스레드 풀로 보내야 합니다. 'I/O를 기다리는 동안 다른 일을 한다'가 비동기의 본질이고, 이걸 기억하면 asyncio를 배우는 일이 한결 쉬워집니다."
+  },
+  {
+    "chapter_no": 2,
+    "clip_no": 2,
+    "clip_title": "코루틴과 task",
+    "timestamp_start": "00:10:01",
+    "timestamp_end": "00:20:30",
+    "concept_id": "coroutines",
+    "script_text": "Python에서 비동기 함수는 async def 키워드로 정의합니다. 이렇게 만든 함수는 일반 함수가 아니라 '코루틴 함수'예요. 호출하면 즉시 실행되지 않고, 코루틴 객체가 돌아옵니다.\n\nimport asyncio\n\nasync def fetch_user(user_id):\n    print(f'fetching {user_id}')\n    await asyncio.sleep(1)\n    return {'id': user_id, 'name': f'User{user_id}'}\n\ncoro = fetch_user(1)  # 아직 실행되지 않음, 단지 코루틴 객체\nresult = asyncio.run(coro)\nprint(result)\n\n코루틴은 잠재력일 뿐이에요. 이벤트 루프 안에서 누군가 await로 깨워 주거나, asyncio.create_task로 task로 감싸 줘야 비로소 실행됩니다. task는 코루틴을 이벤트 루프가 관리하는 작업으로 '등록한다'고 생각하면 돼요.\n\nasync def main():\n    task1 = asyncio.create_task(fetch_user(1))\n    task2 = asyncio.create_task(fetch_user(2))\n    user1 = await task1\n    user2 = await task2\n    print(user1, user2)\n\nasyncio.run(main())\n\n위 예제에서 task1과 task2는 거의 동시에 실행됩니다. 한 작업이 sleep으로 멈춰 있는 동안 다른 작업이 진행되니까, 두 사용자를 가져오는 데 약 1초밖에 걸리지 않아요. 동기 코드로 짰다면 2초가 걸렸겠죠. 코루틴과 task를 머릿속으로 분리해 두면 비동기 코드가 한결 명확해집니다."
+  },
+  {
+    "chapter_no": 2,
+    "clip_no": 3,
+    "clip_title": "asyncio.run과 생명주기",
+    "timestamp_start": "00:20:31",
+    "timestamp_end": "00:30:00",
+    "concept_id": "asyncio-run",
+    "script_text": "asyncio.run은 비동기 프로그램의 표준 진입점이에요. 이름은 단순하지만 안에서 꽤 많은 일을 합니다. 새 이벤트 루프를 만들고, 받은 코루틴을 실행하고, 끝나면 루프를 정리해요.\n\nasync def main():\n    print('start')\n    await asyncio.sleep(0.1)\n    print('end')\n\nasyncio.run(main())\n\n주의할 점이 몇 가지 있어요. 첫째, asyncio.run은 한 프로그램 안에서 단 한 번만 호출하는 것이 일반적입니다. 이미 실행 중인 이벤트 루프가 있는데 또 부르면 RuntimeError가 나요. 그래서 라이브러리 코드를 만들 때는 asyncio.run을 직접 부르지 말고, 사용자가 부른 루프 위에서 동작하도록 짜야 합니다.\n\n둘째, 비동기 컨텍스트 안에서 동기 함수만 호출하면 비동기의 이점이 사라져요. requests 같은 동기 HTTP 라이브러리를 await 없이 부르면 그 시간만큼 이벤트 루프 전체가 멈춥니다. 비동기 코드에서는 httpx, aiohttp 같은 비동기 라이브러리를 함께 써야 효과를 봐요.\n\n마지막으로 자원 정리에 신경 써야 합니다. task가 살아 있는 채로 프로그램이 끝나면 'Task was destroyed but it is pending'이라는 경고가 떠요. await로 끝나기를 기다리거나, asyncio.gather로 모아 두는 식으로 정리해 두는 습관이 필요합니다. asyncio.run의 동작 방식을 이해하면 비동기 프로그램의 시작과 끝을 깔끔하게 관리할 수 있어요."
+  }
+]

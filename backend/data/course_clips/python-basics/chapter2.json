@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 2,
+    "clip_no": 1,
+    "clip_title": "조건문 if-elif-else",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:09:30",
+    "concept_id": "python-conditionals",
+    "script_text": "자, 이번 챕터에서는 제어 흐름을 배워볼 거예요. 먼저 조건문부터 시작합시다. if문은 조건에 따라 코드를 분기하는 건데요, 구조는 이렇습니다.\n\nscore = 85\nif score >= 90:\n    grade = 'A'\nelif score >= 80:\n    grade = 'B'\nelse:\n    grade = 'C'\nprint(grade)  # B\n\nPython에서는 중괄호 대신 들여쓰기로 블록을 구분하는 거 아시죠? 들여쓰기가 틀리면 IndentationError가 나니까 주의하세요. 그리고 여기서 꼭 짚고 넘어갈 게 있어요. ==과 is의 차이입니다. 많은 분들이 이 둘을 같은 거라고 생각하시는데, 전혀 달라요.\n\na = [1, 2, 3]\nb = [1, 2, 3]\nprint(a == b)  # True  (값이 같음)\nprint(a is b)  # False (다른 객체)\n\n==는 값을 비교하고, is는 같은 객체인지, 즉 메모리 주소가 같은지를 비교해요. is는 보통 None 체크할 때만 써요.\n\nif x is None:\n    print('값이 없습니다')\n\n참고로 Python은 작은 정수(-5~256)를 캐싱하기 때문에 a = 100; b = 100일 때 a is b가 True가 나올 수 있는데, 이건 구현 세부사항이라 절대 의존하면 안 됩니다."
+  },
+  {
+    "chapter_no": 2,
+    "clip_no": 2,
+    "clip_title": "for 반복문",
+    "timestamp_start": "00:09:31",
+    "timestamp_end": "00:19:00",
+    "concept_id": "python-for-loop",
+    "script_text": "이번에는 for 반복문을 배워볼게요. Python의 for문은 다른 언어와 좀 달라요. 시퀀스를 직접 순회하는 방식이거든요.\n\nfruits = ['사과', '바나나', '딸기']\nfor fruit in fruits:\n    print(fruit)\n\nrange()를 쓰면 숫자 시퀀스를 만들 수 있는데요, 여기서 많이 헷갈리는 부분이 있어요. range(5)는 1부터 5까지가 아니라, 0부터 4까지예요!\n\nfor i in range(5):\n    print(i)  # 0, 1, 2, 3, 4\n\n1부터 5까지를 원하면 range(1, 6)이라고 써야 합니다. stop 값은 항상 제외되는 거예요. 이게 헷갈린다면 이렇게 기억하세요. len(range(n))은 항상 n이다. range(5)는 5개의 숫자를 생성하는 거죠. 인덱스와 값을 동시에 쓰고 싶을 때는 enumerate()를 활용하면 돼요.\n\nnames = ['Alice', 'Bob', 'Charlie']\nfor i, name in enumerate(names):\n    print(f'{i+1}번째: {name}')\n# 1번째: Alice\n# 2번째: Bob\n# 3번째: Charlie\n\nfor문 안에서 리스트를 만들 때는 리스트 컴프리헨션이 더 파이썬다워요.\n\nsquares = [x**2 for x in range(1, 6)]\nprint(squares)  # [1, 4, 9, 16, 25]"
+  },
+  {
+    "chapter_no": 2,
+    "clip_no": 3,
+    "clip_title": "while 반복문과 break/continue",
+    "timestamp_start": "00:19:01",
+    "timestamp_end": "00:28:30",
+    "concept_id": "python-while-loop",
+    "script_text": "이번에는 while 반복문을 알아볼게요. while은 조건이 참인 동안 계속 반복하는 구조입니다.\n\ncount = 0\nwhile count < 5:\n    print(count)\n    count += 1\n\n그런데 while True라고 하면 무한루프가 되잖아요? '무한루프는 나쁜 거 아닌가요?'라고 생각하실 수 있는데, 사실 while True는 실무에서 정말 많이 쓰이는 패턴이에요. 예를 들어 사용자 입력을 검증할 때 이렇게 씁니다.\n\nwhile True:\n    age = input('나이를 입력하세요: ')\n    if age.isdigit() and int(age) > 0:\n        age = int(age)\n        break\n    print('올바른 숫자를 입력해 주세요.')\n\n올바른 값을 받을 때까지 계속 반복하는 거죠. 서버가 요청을 기다리는 이벤트 루프, 게임의 메인 루프도 while True 패턴이에요. break와 continue도 알아야 해요. break는 루프를 완전히 탈출하고, continue는 현재 반복을 건너뛰고 다음 반복으로 갑니다.\n\nfor i in range(10):\n    if i == 3:\n        continue  # 3은 건너뜀\n    if i == 7:\n        break     # 7에서 멈춤\n    print(i)  # 0, 1, 2, 4, 5, 6\n\n재밌는 건 Python에는 while-else 구문도 있어요. 루프가 break 없이 정상 종료되면 else 블록이 실행됩니다. 검색 패턴에서 유용하게 쓸 수 있어요."
+  }
+]

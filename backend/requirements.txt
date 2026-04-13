@@ -1,0 +1,15 @@
+fastapi>=0.121.0
+uvicorn[standard]
+langchain>=1.0.0
+langgraph>=1.0.0
+langchain-openai
+langchain-postgres
+sse-starlette
+pydantic-settings
+sqlalchemy[asyncio]
+psycopg2-binary
+psycopg[binary]
+pgvector
+langchain-text-splitters
+python-dotenv
+pymupdf

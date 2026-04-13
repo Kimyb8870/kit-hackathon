@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 4,
+    "clip_no": 1,
+    "clip_title": "REST 원칙과 자원 모델링",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:30",
+    "concept_id": "rest-principles",
+    "script_text": "REST는 'Representational State Transfer'의 약자인데, 이름은 어렵지만 핵심 아이디어는 단순합니다. '서버가 가진 모든 것을 자원(resource)으로 보자'는 거예요.\n\n자원은 보통 URL로 표현합니다. 그리고 그 자원에 무엇을 할지는 HTTP 메서드로 정해요. URL에는 동사를 넣지 않습니다. 동사 역할은 메서드가 하니까요.\n\n잘못된 예\nGET  /getUser?id=1\nPOST /createUser\nPOST /deleteUser?id=1\n\n좋은 예\nGET    /users/1   # 사용자 조회\nPOST   /users     # 사용자 생성\nDELETE /users/1   # 사용자 삭제\n\n이렇게 설계하면 API가 마치 명사로 가득 찬 카탈로그 같은 모양이 됩니다. 누군가 처음 API 문서를 봐도 'users 자원이 있고, 표준 메서드로 다룰 수 있구나'를 한눈에 파악할 수 있어요.\n\n자원 사이의 계층 관계도 URL로 표현할 수 있습니다. 예를 들어 '특정 사용자의 글 목록'은 /users/1/posts로, 'Bo의 3번 댓글'은 /users/2/posts/5/comments/3으로 자연스럽게 만들어집니다. URL 디자인은 한 번 정하면 바꾸기 어렵기 때문에, 처음 설계할 때 충분히 고민할 가치가 있는 작업입니다."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 2,
+    "clip_title": "CRUD 엔드포인트 구현",
+    "timestamp_start": "00:10:31",
+    "timestamp_end": "00:22:00",
+    "concept_id": "crud-endpoints",
+    "script_text": "이제 FastAPI로 진짜 CRUD 엔드포인트를 만들어 봅시다. CRUD는 Create, Read, Update, Delete의 머리글자예요.\n\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\nfake_db: dict[int, dict] = {}\n_next_id = 1\n\nclass UserIn(BaseModel):\n    name: str\n    email: str\n\nclass UserOut(UserIn):\n    id: int\n\n@app.post('/users', response_model=UserOut)\ndef create_user(payload: UserIn):\n    global _next_id\n    user = {'id': _next_id, **payload.dict()}\n    fake_db[_next_id] = user\n    _next_id += 1\n    return user\n\n@app.get('/users/{user_id}', response_model=UserOut)\ndef get_user(user_id: int):\n    user = fake_db.get(user_id)\n    if not user:\n        raise HTTPException(status_code=404, detail='User not found')\n    return user\n\n@app.put('/users/{user_id}', response_model=UserOut)\ndef update_user(user_id: int, payload: UserIn):\n    if user_id not in fake_db:\n        raise HTTPException(status_code=404, detail='User not found')\n    fake_db[user_id] = {'id': user_id, **payload.dict()}\n    return fake_db[user_id]\n\n@app.delete('/users/{user_id}', status_code=204)\ndef delete_user(user_id: int):\n    if user_id not in fake_db:\n        raise HTTPException(status_code=404, detail='User not found')\n    del fake_db[user_id]\n\n실제 프로젝트에서는 fake_db 자리에 데이터베이스가 들어갑니다. 흐름은 비슷해요. 입력을 받는다 → 검증한다 → DB에 반영한다 → 결과를 돌려준다. 어떤 프레임워크든 이 골격은 거의 똑같습니다."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 3,
+    "clip_title": "기본 인증과 토큰",
+    "timestamp_start": "00:22:01",
+    "timestamp_end": "00:33:00",
+    "concept_id": "auth-basics",
+    "script_text": "API에 누구나 마음대로 접근할 수는 없잖아요. 그래서 필요한 게 인증(authentication)과 인가(authorization)입니다. 인증은 '당신이 누구인지'를 확인하는 일이고, 인가는 '확인된 당신이 무엇을 해도 되는지'를 결정하는 일이에요.\n\n웹에서 가장 흔한 인증 방식 중 하나가 토큰 기반 방식입니다. 흐름은 이렇습니다.\n\n1. 사용자가 로그인 폼에 이메일과 비밀번호를 입력합니다.\n2. 서버는 이걸 검증한 뒤, 그 사용자를 식별할 수 있는 토큰 문자열을 만들어 응답합니다.\n3. 클라이언트는 그 토큰을 저장해 두고, 이후 모든 요청에 'Authorization: Bearer 토큰' 헤더를 붙여 보냅니다.\n4. 서버는 헤더에서 토큰을 꺼내 검증한 다음, 사용자가 누구인지를 알아내고 요청을 처리합니다.\n\n이 토큰을 흔히 JWT(JSON Web Token)로 만듭니다. JWT는 자기 자신에 사용자 정보를 담고 서명까지 포함하기 때문에, 서버가 별도의 세션 저장소 없이도 사용자를 식별할 수 있어요.\n\n주의할 점이 두 가지 있어요. 첫째, 비밀번호는 절대로 평문 그대로 저장하면 안 됩니다. bcrypt나 argon2 같은 해시 함수로 변환해서 저장하세요. 둘째, 토큰을 클라이언트에 저장할 때는 HTTPS와 적절한 저장 위치를 함께 고민해야 합니다. 인증은 이번 강의에서는 기본만 다루지만, 실무에서는 한 권의 책을 따로 살펴봐야 할 만큼 깊은 영역입니다."
+  }
+]

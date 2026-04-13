@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 1,
+    "clip_no": 1,
+    "clip_title": "비즈니스 이메일의 오프닝과 클로징",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:09:00",
+    "concept_id": "business-email-opening",
+    "script_text": "외국계 회사에서 이메일을 쓸 때 가장 흔히 틀리는 부분이 오프닝과 클로징입니다. 교과서에서 배운 'Dear Sir/Madam'이나 'Sincerely yours' 같은 표현은 요즘 실무에서는 거의 쓰지 않아요.\n\n일반적인 오프닝은 상대 이름으로 시작합니다. 처음 연락하는 사이라면 'Hi Michael,' 정도가 가장 무난합니다. 친밀도가 어느 정도 있다면 'Hope you're doing well,'을 한 줄 덧붙이는 것도 좋아요. 단, 긴급한 요청 메일에서는 이런 인사말을 생략하는 게 프로답게 보입니다.\n\n클로징은 상황에 맞게 선택하세요. 일반 업무 메일은 'Best regards,', 감사 표현은 'Thanks,', 다음 액션을 기다린다면 'Looking forward to your reply,'가 자연스럽습니다. 'Sincerely'는 너무 격식이 강해서 오히려 어색하게 느껴질 수 있어요. 형식보다 톤의 일관성이 중요합니다."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 2,
+    "clip_title": "회의 의제와 진행 표현",
+    "timestamp_start": "00:09:00",
+    "timestamp_end": "00:19:00",
+    "concept_id": "meeting-agenda",
+    "script_text": "영어 회의에서 진행자 역할을 맡게 되면 몇 가지 정해진 표현만 알고 있어도 매끄럽게 끌어갈 수 있습니다. 외국계 회사의 회의는 의제 중심으로 진행되기 때문에 구조가 명확해요.\n\n회의를 시작할 때는 'Thanks for joining. Let's get started.'로 간단히 엽니다. 곧바로 의제를 소개할 때는 'Today, I'd like to go over three topics.' 또는 'There are three items on the agenda.'라고 말하면 됩니다. 각 의제로 넘어갈 때는 'Let's move on to the next topic.'이 표준 표현이에요.\n\n발언자를 바꿀 때는 'John, would you like to take us through this?'처럼 부드럽게 넘깁니다. 의견이 엇갈릴 땐 'I see your point, but...' 'That's a fair point. On the other hand...' 같은 완충 표현을 쓰면 논의가 감정적으로 흐르지 않아요. 마무리는 'Let's wrap up here. I'll send the notes afterward.'가 깔끔합니다."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 3,
+    "clip_title": "협상에서 쓰는 정중한 거절",
+    "timestamp_start": "00:19:00",
+    "timestamp_end": "00:29:00",
+    "concept_id": "negotiation-polite-refusal",
+    "script_text": "영어 협상에서 가장 어려운 건 '거절'입니다. 한국어로는 '죄송하지만 어렵겠습니다'로 해결되지만, 영어로는 그대로 옮기면 너무 약하거나 차갑게 들릴 수 있어요. 완곡함과 명확함 사이의 균형이 필요합니다.\n\n자주 쓰는 정중한 거절 패턴은 이렇습니다. 'I understand where you're coming from, but at this stage, we can't commit to that.' 이 표현은 상대의 입장을 먼저 인정한 뒤 선을 긋는 방식이에요. 상대방이 체면을 잃지 않으면서도 답변은 분명합니다.\n\n가격 협상이라면 'That's a bit higher than we were expecting. Could we find a middle ground?'처럼 대안을 제시하는 게 좋습니다. 완전한 거절 대신 'Not in this round, but let's revisit this in Q3.' 같은 연기 전략도 자주 쓰입니다. 핵심은 'No' 자체보다 그 뒤에 오는 맥락입니다. 이유와 대안을 함께 주면 신뢰가 무너지지 않아요."
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 1,
+    "clip_no": 1,
+    "clip_title": "왜 레이어를 나누는가",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:09:00",
+    "concept_id": "layered-architecture",
+    "script_text": "한 파일에 다 때려 박은 코드를 한 번이라도 유지보수해 본 적이 있다면, 왜 레이어를 나누는지 본능적으로 알게 됩니다. HTTP 요청 처리, 비즈니스 규칙, 데이터베이스 접근, 외부 API 호출이 한 함수 안에 뒤섞여 있으면 한 줄을 고치는 데도 전체를 읽어야 해요.\n\n레이어드 아키텍처는 코드를 책임이 비슷한 것끼리 묶고, 묶음 사이의 호출 방향을 한쪽으로 정리하자는 발상입니다. 보통 이런 식으로 나눠요.\n\n- 프레젠테이션 레이어: HTTP 요청을 받고 응답을 만든다\n- 서비스 레이어: 비즈니스 규칙을 실행한다\n- 리포지토리 레이어: 데이터 저장소와 대화한다\n\n위에서 아래로만 호출이 흐르고, 아래쪽 레이어는 위쪽을 알지 못해요. 이렇게 단방향으로 정리되면 변경의 영향이 좁아집니다. 데이터베이스를 PostgreSQL에서 다른 것으로 바꿔도 리포지토리만 손대면 되고, API 형태만 바꿀 일이면 프레젠테이션 레이어만 보면 돼요.\n\n레이어를 나누는 비용도 분명히 있습니다. 파일 수가 많아지고, 처음에는 단순한 작업도 여러 곳을 거쳐야 하니까요. 하지만 프로젝트가 살아남는 한 코드는 계속 자라기 때문에, 이 작은 투자가 시간이 갈수록 크게 돌아옵니다."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 2,
+    "clip_title": "프레젠테이션-서비스-리포지토리",
+    "timestamp_start": "00:09:01",
+    "timestamp_end": "00:19:00",
+    "concept_id": "three-layer",
+    "script_text": "세 레이어를 더 구체적으로 살펴봅시다. 'A 사용자가 B 사용자에게 1000원을 송금한다'는 기능을 예로 들어 볼게요.\n\n프레젠테이션 레이어는 라우터 함수 안에 살아요. HTTP 요청에서 body를 꺼내고, Pydantic으로 검증한 뒤, 서비스를 부릅니다. 응답을 어떤 JSON 모양으로 돌려줄지 결정하는 것도 여기 책임이에요.\n\n@router.post('/transfers')\ndef create_transfer(req: TransferRequest, service: TransferService = Depends()):\n    result = service.transfer(req.from_id, req.to_id, req.amount)\n    return {'transfer_id': result.id}\n\n서비스 레이어는 'A의 잔액이 충분한가, 두 사용자가 같은 통화인가, 송금 한도를 넘지 않았는가' 같은 비즈니스 규칙을 검사합니다. 이 부분이 회사가 진짜 가치를 만드는 곳이에요.\n\nclass TransferService:\n    def __init__(self, accounts: AccountRepository):\n        self._accounts = accounts\n    def transfer(self, from_id, to_id, amount):\n        sender = self._accounts.get(from_id)\n        if sender.balance < amount:\n            raise InsufficientFunds()\n        ...\n\n리포지토리 레이어는 데이터베이스와 대화합니다. SQL을 쓰든 ORM을 쓰든, 외부 세계는 알 필요가 없어요. 서비스에게는 그저 'get(from_id)을 부르면 Account 객체가 돌아온다'만 보여 주면 됩니다.\n\n이 구조의 핵심은 서비스가 HTTP를 모르고, 리포지토리가 비즈니스 규칙을 모른다는 점이에요. 각자 자기 일에만 집중하기 때문에 테스트하기도 쉽고, 변화에도 강해집니다."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 3,
+    "clip_title": "의존성 방향과 안정성",
+    "timestamp_start": "00:19:01",
+    "timestamp_end": "00:28:00",
+    "concept_id": "dependency-rule",
+    "script_text": "레이어를 잘 나눠 놓고도 망가지는 경우가 있어요. 의존성 방향이 거꾸로 되면 그렇게 됩니다. 예를 들어 리포지토리가 서비스 클래스를 import한다거나, 서비스 안에서 HTTPException을 직접 raise하는 식이에요.\n\n의존성은 항상 '구체적인 것에서 추상적인 것'으로, '바깥쪽에서 안쪽'으로 흘러야 합니다. 서비스가 리포지토리를 알아도 되지만, 리포지토리는 서비스의 존재 자체를 몰라야 해요.\n\n실무에서 자주 쓰는 도구가 의존성 역전(dependency inversion)입니다. 서비스가 구체적인 클래스 대신 인터페이스(또는 Python의 Protocol)에 의존하게 만드는 거예요.\n\nfrom typing import Protocol\n\nclass AccountRepository(Protocol):\n    def get(self, account_id: int) -> Account: ...\n    def save(self, account: Account) -> None: ...\n\nclass TransferService:\n    def __init__(self, accounts: AccountRepository):\n        self._accounts = accounts\n\n이렇게 두면 서비스는 'get과 save라는 약속을 지키는 무언가'가 필요할 뿐, 그게 PostgreSQL 구현인지 인메모리 가짜 구현인지는 신경 쓰지 않아요. 테스트할 때는 가짜 구현을 끼워 넣고, 실제 운영에서는 진짜 구현을 끼워 넣으면 됩니다.\n\n안정적인 코드의 비밀은 화려한 패턴이 아니라, 의존성 방향을 의식적으로 관리하는 작은 습관에 있습니다."
+  }
+]

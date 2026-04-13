@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 1,
+    "clip_no": 1,
+    "clip_title": "GameObject와 컴포넌트 구조",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "unity-gameobject",
+    "script_text": "유니티의 모든 것은 GameObject에서 출발합니다. 캐릭터, 장애물, 카메라, 조명까지 전부 GameObject예요. GameObject 자체는 빈 상자 같은 존재이고, 실제로 '무엇을 할지'는 Component라는 조각들이 결정합니다.\n\n예를 들어 공을 튀기는 오브젝트를 만든다고 해볼게요. 빈 GameObject를 하나 만들고, 거기에 Mesh Renderer 컴포넌트를 추가하면 눈에 보이는 형태가 생깁니다. Rigidbody 컴포넌트를 추가하면 중력과 물리가 적용돼요. 그리고 Sphere Collider를 붙이면 충돌 감지가 가능해집니다.\n\n이 구조가 바로 '컴포지션'이라는 디자인 패턴입니다. 상속 대신 작은 부품을 조립하는 방식이에요. 덕분에 캐릭터를 확장할 때 새 기능을 추가하려면 새 Component 하나만 만들어 붙이면 됩니다. 유니티에서 객체 지향을 너무 엄격하게 적용하지 않는 이유가 바로 이 조립식 철학 때문입니다."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 2,
+    "clip_title": "Transform과 좌표계 다루기",
+    "timestamp_start": "00:10:00",
+    "timestamp_end": "00:20:00",
+    "concept_id": "unity-transform",
+    "script_text": "모든 GameObject는 기본으로 Transform 컴포넌트를 갖고 있습니다. 이 컴포넌트는 오브젝트의 위치(Position), 회전(Rotation), 크기(Scale)를 저장해요. 게임에서 무언가를 움직인다는 건 결국 이 Transform의 값을 바꾼다는 뜻입니다.\n\n코드에서 위치를 바꾸려면 이렇게 씁니다.\n\ntransform.position = new Vector3(1f, 0f, 0f);\n\n여기서 중요한 건 좌표계의 구분입니다. Unity는 부모가 있으면 local 좌표, 월드 공간에선 world 좌표를 씁니다. transform.position은 월드 좌표, transform.localPosition은 부모 기준 좌표예요. 이걸 혼동하면 의도와 전혀 다른 위치에 오브젝트가 나타나는 버그가 자주 납니다.\n\n회전은 Quaternion으로 저장되지만 눈으로 이해하기 어렵기 때문에 보통 transform.eulerAngles로 degree 값을 다룹니다. Scale은 1이 기본이고, 0.5면 절반 크기, 2면 두 배 크기입니다. 이 세 가지만 자유롭게 조작할 수 있으면 게임 오브젝트의 움직임은 거의 모두 표현할 수 있어요."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 3,
+    "clip_title": "C# 스크립트 기초와 MonoBehaviour",
+    "timestamp_start": "00:20:00",
+    "timestamp_end": "00:30:00",
+    "concept_id": "unity-monobehaviour",
+    "script_text": "유니티에서 스크립트를 작성할 때는 MonoBehaviour를 상속받은 C# 클래스를 만듭니다. 이 클래스가 GameObject에 붙으면 그때부터 Unity 엔진의 생명주기 이벤트를 받을 수 있어요.\n\n가장 중요한 두 메서드는 Start와 Update입니다.\n\nvoid Start() {\n    // 게임 시작 시 한 번 호출\n}\n\nvoid Update() {\n    // 매 프레임마다 호출\n}\n\nStart는 초기화 용도이고, Update는 매 프레임 실행되기 때문에 입력 처리나 위치 갱신 같은 로직이 여기 들어갑니다. 주의할 점은 Update에서 무거운 연산을 돌리면 프레임이 뚝뚝 끊긴다는 거예요. 물리 계산은 FixedUpdate에 두는 게 안전합니다.\n\n그리고 한 가지 자주 나오는 실수가 있어요. Update 안에서 new 키워드로 객체를 매 프레임 생성하면 GC가 자주 발생해 성능이 떨어집니다. 루프 밖에서 한 번 만들어두고 재사용하는 습관을 들이세요. 모바일 게임에서는 이 차이가 특히 크게 체감됩니다."
+  }
+]

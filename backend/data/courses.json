@@ -1,0 +1,511 @@
+{
+  "courses": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "title": "Python 기초 완전 정복",
+      "category": "프로그래밍",
+      "difficulty": "beginner",
+      "platform": "KEG Academy",
+      "total_chapters": 5,
+      "chapters": [
+        {
+          "chapter_no": 1,
+          "title": "Python 시작하기",
+          "clips": [
+            {
+              "clip_no": 1,
+              "clip_title": "Python이란 무엇인가?",
+              "timestamp_start": "00:00:00",
+              "timestamp_end": "00:08:30",
+              "concept_id": "python-variables",
+              "script_text": "Python은 1991년 귀도 반 로섬이 만든 고급 프로그래밍 언어입니다. 변수는 값을 저장하는 이름표와 같습니다. x = 10이라고 쓰면 x라는 이름이 10이라는 객체를 가리킵니다. 중요한 점은 변수는 '상자'가 아니라 '이름표'라는 것입니다. 상자 비유를 쓰면 재할당(x = 20)이나 가변 객체의 동작을 이해하기 어렵습니다."
+            },
+            {
+              "clip_no": 2,
+              "clip_title": "변수와 자료형",
+              "timestamp_start": "00:08:31",
+              "timestamp_end": "00:18:00",
+              "concept_id": "python-variables",
+              "script_text": "Python의 기본 자료형에는 int, float, str, bool이 있습니다. type() 함수로 자료형을 확인할 수 있습니다. Python은 동적 타이핑 언어라서 변수에 다른 타입의 값을 다시 할당할 수 있습니다. a = 5를 하면 a는 int 객체 5를 가리키고, a = 'hello'를 하면 이제 str 객체를 가리킵니다."
+            },
+            {
+              "clip_no": 3,
+              "clip_title": "입출력과 연산자",
+              "timestamp_start": "00:18:01",
+              "timestamp_end": "00:27:00",
+              "concept_id": "python-variables",
+              "script_text": "print() 함수로 출력하고 input() 함수로 입력을 받습니다. input()은 항상 문자열을 반환하므로 숫자로 사용하려면 int()나 float()로 변환해야 합니다. 산술 연산자 +, -, *, /, //, %, **을 배워봅시다. //는 정수 나눗셈, **는 거듭제곱입니다."
+            }
+          ]
+        },
+        {
+          "chapter_no": 2,
+          "title": "제어 흐름",
+          "clips": [
+            {
+              "clip_no": 1,
+              "clip_title": "조건문 if-elif-else",
+              "timestamp_start": "00:00:00",
+              "timestamp_end": "00:10:00",
+              "concept_id": "python-conditionals",
+              "script_text": "if문은 조건에 따라 코드를 분기합니다. if condition: 블록, elif other_condition: 블록, else: 블록 구조입니다. 주의할 점은 ==과 is의 차이입니다. ==는 값을 비교하고, is는 같은 객체인지(메모리 주소) 비교합니다. a = [1,2]; b = [1,2]이면 a == b는 True이지만 a is b는 False입니다."
+            },
+            {
+              "clip_no": 2,
+              "clip_title": "for 반복문",
+              "timestamp_start": "00:10:01",
+              "timestamp_end": "00:20:00",
+              "concept_id": "python-for-loop",
+              "script_text": "for문은 시퀀스를 순회합니다. range(5)는 0, 1, 2, 3, 4를 생성합니다. 주의: 1부터 5가 아닙니다! range(1, 6)이 1~5입니다. for i in range(5)는 0부터 4까지 총 5번 반복합니다. enumerate()를 쓰면 인덱스와 값을 함께 가져올 수 있습니다."
+            },
+            {
+              "clip_no": 3,
+              "clip_title": "while 반복문과 제어문",
+              "timestamp_start": "00:20:01",
+              "timestamp_end": "00:30:00",
+              "concept_id": "python-while-loop",
+              "script_text": "while문은 조건이 참인 동안 반복합니다. while True는 무한루프를 만들지만, 사실 사용자 입력 대기, 서버 실행, 게임 루프 등 실용적인 용도가 많습니다. break는 루프 탈출, continue는 다음 반복으로 건너뜁니다. while-else 구문도 있어서 루프가 break 없이 끝나면 else 블록이 실행됩니다."
+            },
+            {
+              "clip_no": 4,
+              "clip_title": "예외 처리 try-except",
+              "timestamp_start": "00:30:01",
+              "timestamp_end": "00:40:00",
+              "concept_id": "python-conditionals",
+              "script_text": "try-except 구문으로 예외를 처리합니다. try 블록에서 오류가 발생하면 except 블록이 실행됩니다. except ValueError as e:처럼 특정 예외를 잡을 수 있습니다. finally 블록은 오류 여부와 관계없이 항상 실행되어 리소스 정리에 유용합니다."
+            }
+          ]
+        },
+        {
+          "chapter_no": 3,
+          "title": "자료구조",
+          "clips": [
+            {
+              "clip_no": 1,
+              "clip_title": "리스트와 리스트 컴프리헨션",
+              "timestamp_start": "00:00:00",
+              "timestamp_end": "00:12:00",
+              "concept_id": "python-list",
+              "script_text": "리스트는 순서가 있는 가변 시퀀스입니다. C의 배열과 달리 다양한 타입을 담을 수 있고, 크기가 동적으로 변합니다. append(), extend(), insert() 등의 메서드가 있습니다. 리스트 컴프리헨션 [x**2 for x in range(10)]은 간결하고 파이썬다운 방식입니다. 슬라이싱 a[1:3]은 인덱스 1부터 2까지입니다."
+            },
+            {
+              "clip_no": 2,
+              "clip_title": "튜플과 딕셔너리",
+              "timestamp_start": "00:12:01",
+              "timestamp_end": "00:24:00",
+              "concept_id": "python-tuple-dict",
+              "script_text": "튜플은 불변 시퀀스입니다. '느린 리스트'가 아니라, 변경되지 않아야 할 데이터 묶음에 사용합니다. 딕셔너리는 키-값 쌍으로 O(1) 접근이 가능합니다. dict.get(key, default)로 안전하게 접근할 수 있습니다. Python 3.7+부터 딕셔너리는 삽입 순서를 보장합니다."
+            },
+            {
+              "clip_no": 3,
+              "clip_title": "집합과 자료구조 선택",
+              "timestamp_start": "00:24:01",
+              "timestamp_end": "00:35:00",
+              "concept_id": "python-tuple-dict",
+              "script_text": "집합(set)은 중복 없는 원소의 모음입니다. 합집합(|), 교집합(&), 차집합(-) 연산을 지원합니다. 멤버십 테스트(in)가 리스트보다 훨씬 빠릅니다. 자료구조 선택 기준: 순서가 중요하면 리스트, 불변이면 튜플, 키-값이면 딕셔너리, 고유값이면 집합을 사용하세요."
+            }
+          ]
+        },
+        {
+          "chapter_no": 4,
+          "title": "함수",
+          "clips": [
+            {
+              "clip_no": 1,
+              "clip_title": "함수 정의와 호출",
+              "timestamp_start": "00:00:00",
+              "timestamp_end": "00:10:00",
+              "concept_id": "python-functions",
+              "script_text": "def 키워드로 함수를 정의합니다. 함수는 코드를 재사용하고 구조화하는 핵심 도구입니다. return문이 없으면 함수는 None을 반환합니다. '반환값이 없다'가 아니라 'None을 반환한다'가 정확합니다. 매개변수에 기본값을 지정할 수 있고, *args와 **kwargs로 가변 인자를 받을 수 있습니다."
+            },
+            {
+              "clip_no": 2,
+              "clip_title": "스코프와 클로저",
+              "timestamp_start": "00:10:01",
+              "timestamp_end": "00:22:00",
+              "concept_id": "python-scope-closure",
+              "script_text": "Python의 스코프 규칙은 LEGB(Local, Enclosing, Global, Built-in)입니다. 스코프는 단순히 '변수가 보이는 범위'가 아니라, 실행 컨텍스트(네임스페이스)입니다. 클로저는 외부 함수의 변수를 기억하는 내부 함수입니다. 클로저를 이해하면 데코레이터와 팩토리 패턴을 자연스럽게 쓸 수 있습니다."
+            },
+            {
+              "clip_no": 3,
+              "clip_title": "람다와 고차 함수",
+              "timestamp_start": "00:22:01",
+              "timestamp_end": "00:32:00",
+              "concept_id": "python-functions",
+              "script_text": "lambda는 이름 없는 간단한 함수입니다. map(), filter(), sorted()의 key 인자에 자주 쓰입니다. sorted(students, key=lambda s: s['score'])처럼 활용합니다. 하지만 복잡한 로직에는 일반 def 함수가 가독성이 좋습니다."
+            }
+          ]
+        },
+        {
+          "chapter_no": 5,
+          "title": "객체지향 프로그래밍",
+          "clips": [
+            {
+              "clip_no": 1,
+              "clip_title": "클래스와 객체",
+              "timestamp_start": "00:00:00",
+              "timestamp_end": "00:12:00",
+              "concept_id": "python-class",
+              "script_text": "클래스는 객체를 만드는 틀입니다. '설계도' 비유가 흔하지만, 더 정확하게는 '타입을 정의하는 것'입니다. 클래스 자체도 객체이며, 메타프로그래밍이 가능합니다. __init__은 생성자가 아니라 초기화 메서드입니다. self는 인스턴스 자신을 가리키며 명시적으로 써야 합니다."
+            },
+            {
+              "clip_no": 2,
+              "clip_title": "상속과 다형성",
+              "timestamp_start": "00:12:01",
+              "timestamp_end": "00:24:00",
+              "concept_id": "python-inheritance",
+              "script_text": "상속은 단순한 코드 재사용 도구가 아닙니다. 'is-a' 관계를 표현할 때 사용합니다. Dog is an Animal은 맞지만, Stack is a List는 부적절합니다. 코드 재사용이 목적이면 합성(composition)을 고려하세요. super()로 부모 클래스 메서드를 호출하며, MRO(Method Resolution Order)가 다중 상속의 순서를 결정합니다."
+            },
+            {
+              "clip_no": 3,
+              "clip_title": "매직 메서드와 프로토콜",
+              "timestamp_start": "00:24:01",
+              "timestamp_end": "00:35:00",
+              "concept_id": "python-class",
+              "script_text": "__str__, __repr__, __len__, __getitem__ 등의 매직 메서드로 Python의 프로토콜을 구현합니다. __str__은 사용자 친화적 문자열, __repr__은 개발자용 문자열입니다. __eq__를 정의하면 == 연산자의 동작을 커스터마이즈할 수 있습니다. 이를 연산자 오버로딩이라 합니다."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "title": "백엔드 개발 입문: 서버와 데이터베이스",
+      "category": "backend",
+      "difficulty": "beginner",
+      "platform": "Clover",
+      "total_chapters": 4,
+      "chapters": [
+        {
+          "chapter_no": 1,
+          "title": "웹 서버 기초",
+          "clips": [
+            {"clip_no": 1, "clip_title": "HTTP 프로토콜 개요", "timestamp_start": "00:00:00", "timestamp_end": "00:09:00", "concept_id": "http-basics"},
+            {"clip_no": 2, "clip_title": "요청과 응답의 구조", "timestamp_start": "00:09:01", "timestamp_end": "00:18:00", "concept_id": "request-response"},
+            {"clip_no": 3, "clip_title": "상태 코드와 HTTP 메서드", "timestamp_start": "00:18:01", "timestamp_end": "00:27:00", "concept_id": "http-methods"}
+          ]
+        },
+        {
+          "chapter_no": 2,
+          "title": "FastAPI 시작하기",
+          "clips": [
+            {"clip_no": 1, "clip_title": "FastAPI 프로젝트 구조", "timestamp_start": "00:00:00", "timestamp_end": "00:10:00", "concept_id": "fastapi-setup"},
+            {"clip_no": 2, "clip_title": "라우팅과 경로 매개변수", "timestamp_start": "00:10:01", "timestamp_end": "00:20:00", "concept_id": "fastapi-routing"},
+            {"clip_no": 3, "clip_title": "Pydantic 모델로 입력 검증", "timestamp_start": "00:20:01", "timestamp_end": "00:30:00", "concept_id": "pydantic-models"}
+          ]
+        },
+        {
+          "chapter_no": 3,
+          "title": "데이터베이스 기본",
+          "clips": [
+            {"clip_no": 1, "clip_title": "관계형 데이터베이스 개념", "timestamp_start": "00:00:00", "timestamp_end": "00:09:30", "concept_id": "rdbms-basics"},
+            {"clip_no": 2, "clip_title": "SQL 기본 쿼리", "timestamp_start": "00:09:31", "timestamp_end": "00:20:00", "concept_id": "sql-queries"},
+            {"clip_no": 3, "clip_title": "SQLAlchemy ORM 입문", "timestamp_start": "00:20:01", "timestamp_end": "00:31:00", "concept_id": "sqlalchemy-basics"}
+          ]
+        },
+        {
+          "chapter_no": 4,
+          "title": "REST API 설계",
+          "clips": [
+            {"clip_no": 1, "clip_title": "REST 원칙과 자원 모델링", "timestamp_start": "00:00:00", "timestamp_end": "00:10:30", "concept_id": "rest-principles"},
+            {"clip_no": 2, "clip_title": "CRUD 엔드포인트 구현", "timestamp_start": "00:10:31", "timestamp_end": "00:22:00", "concept_id": "crud-endpoints"},
+            {"clip_no": 3, "clip_title": "기본 인증과 토큰", "timestamp_start": "00:22:01", "timestamp_end": "00:33:00", "concept_id": "auth-basics"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440003",
+      "title": "실무 백엔드 패턴: 서비스 레이어와 도메인",
+      "category": "backend",
+      "difficulty": "intermediate",
+      "platform": "Clover",
+      "total_chapters": 4,
+      "chapters": [
+        {
+          "chapter_no": 1,
+          "title": "레이어드 아키텍처",
+          "clips": [
+            {"clip_no": 1, "clip_title": "왜 레이어를 나누는가", "timestamp_start": "00:00:00", "timestamp_end": "00:09:00", "concept_id": "layered-architecture"},
+            {"clip_no": 2, "clip_title": "프레젠테이션-서비스-리포지토리", "timestamp_start": "00:09:01", "timestamp_end": "00:19:00", "concept_id": "three-layer"},
+            {"clip_no": 3, "clip_title": "의존성 방향과 안정성", "timestamp_start": "00:19:01", "timestamp_end": "00:28:00", "concept_id": "dependency-rule"}
+          ]
+        },
+        {
+          "chapter_no": 2,
+          "title": "리포지토리 패턴",
+          "clips": [
+            {"clip_no": 1, "clip_title": "리포지토리의 역할", "timestamp_start": "00:00:00", "timestamp_end": "00:09:30", "concept_id": "repository-pattern"},
+            {"clip_no": 2, "clip_title": "인터페이스와 구현 분리", "timestamp_start": "00:09:31", "timestamp_end": "00:19:30", "concept_id": "repo-interface"},
+            {"clip_no": 3, "clip_title": "단위 테스트와 모킹", "timestamp_start": "00:19:31", "timestamp_end": "00:29:00", "concept_id": "repo-testing"}
+          ]
+        },
+        {
+          "chapter_no": 3,
+          "title": "서비스 레이어 설계",
+          "clips": [
+            {"clip_no": 1, "clip_title": "비즈니스 로직의 위치", "timestamp_start": "00:00:00", "timestamp_end": "00:10:00", "concept_id": "service-layer"},
+            {"clip_no": 2, "clip_title": "트랜잭션 스크립트와 도메인 모델", "timestamp_start": "00:10:01", "timestamp_end": "00:21:00", "concept_id": "transaction-script"},
+            {"clip_no": 3, "clip_title": "유스케이스 모델링", "timestamp_start": "00:21:01", "timestamp_end": "00:31:00", "concept_id": "use-case"}
+          ]
+        },
+        {
+          "chapter_no": 4,
+          "title": "에러 처리와 트랜잭션",
+          "clips": [
+            {"clip_no": 1, "clip_title": "도메인 예외 설계", "timestamp_start": "00:00:00", "timestamp_end": "00:10:00", "concept_id": "domain-exceptions"},
+            {"clip_no": 2, "clip_title": "트랜잭션 경계 정의", "timestamp_start": "00:10:01", "timestamp_end": "00:20:30", "concept_id": "transaction-boundary"},
+            {"clip_no": 3, "clip_title": "재시도와 보상 트랜잭션", "timestamp_start": "00:20:31", "timestamp_end": "00:31:00", "concept_id": "retry-compensation"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440004",
+      "title": "고급 Python: 비동기와 동시성",
+      "category": "backend",
+      "difficulty": "advanced",
+      "platform": "Clover",
+      "total_chapters": 4,
+      "chapters": [
+        {
+          "chapter_no": 1,
+          "title": "제너레이터와 이터레이터 심화",
+          "clips": [
+            {"clip_no": 1, "clip_title": "이터레이터 프로토콜", "timestamp_start": "00:00:00", "timestamp_end": "00:09:30", "concept_id": "iterator-protocol"},
+            {"clip_no": 2, "clip_title": "제너레이터와 yield", "timestamp_start": "00:09:31", "timestamp_end": "00:19:30", "concept_id": "generators"},
+            {"clip_no": 3, "clip_title": "yield from과 위임", "timestamp_start": "00:19:31", "timestamp_end": "00:29:00", "concept_id": "yield-from"}
+          ]
+        },
+        {
+          "chapter_no": 2,
+          "title": "asyncio 기본",
+          "clips": [
+            {"clip_no": 1, "clip_title": "이벤트 루프 개념", "timestamp_start": "00:00:00", "timestamp_end": "00:10:00", "concept_id": "event-loop"},
+            {"clip_no": 2, "clip_title": "코루틴과 task", "timestamp_start": "00:10:01", "timestamp_end": "00:20:30", "concept_id": "coroutines"},
+            {"clip_no": 3, "clip_title": "asyncio.run과 생명주기", "timestamp_start": "00:20:31", "timestamp_end": "00:30:00", "concept_id": "asyncio-run"}
+          ]
+        },
+        {
+          "chapter_no": 3,
+          "title": "async/await 패턴",
+          "clips": [
+            {"clip_no": 1, "clip_title": "await의 진짜 동작", "timestamp_start": "00:00:00", "timestamp_end": "00:10:00", "concept_id": "await-semantics"},
+            {"clip_no": 2, "clip_title": "gather와 wait", "timestamp_start": "00:10:01", "timestamp_end": "00:20:00", "concept_id": "async-gather"},
+            {"clip_no": 3, "clip_title": "async context manager", "timestamp_start": "00:20:01", "timestamp_end": "00:30:00", "concept_id": "async-context"}
+          ]
+        },
+        {
+          "chapter_no": 4,
+          "title": "동시성 제어",
+          "clips": [
+            {"clip_no": 1, "clip_title": "Lock과 Semaphore", "timestamp_start": "00:00:00", "timestamp_end": "00:10:00", "concept_id": "async-lock"},
+            {"clip_no": 2, "clip_title": "Queue와 생산자-소비자", "timestamp_start": "00:10:01", "timestamp_end": "00:20:00", "concept_id": "async-queue"},
+            {"clip_no": 3, "clip_title": "취소와 타임아웃", "timestamp_start": "00:20:01", "timestamp_end": "00:30:00", "concept_id": "async-cancel"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440005",
+      "title": "데이터 분석 입문: pandas와 시각화",
+      "category": "data",
+      "difficulty": "beginner",
+      "platform": "Clover",
+      "total_chapters": 4,
+      "chapters": [
+        {
+          "chapter_no": 1,
+          "title": "NumPy 기초",
+          "clips": [
+            {"clip_no": 1, "clip_title": "ndarray 객체 이해", "timestamp_start": "00:00:00", "timestamp_end": "00:09:00", "concept_id": "numpy-array"},
+            {"clip_no": 2, "clip_title": "벡터 연산과 브로드캐스팅", "timestamp_start": "00:09:01", "timestamp_end": "00:19:00", "concept_id": "numpy-broadcast"},
+            {"clip_no": 3, "clip_title": "인덱싱과 슬라이싱", "timestamp_start": "00:19:01", "timestamp_end": "00:28:00", "concept_id": "numpy-indexing"}
+          ]
+        },
+        {
+          "chapter_no": 2,
+          "title": "pandas DataFrame",
+          "clips": [
+            {"clip_no": 1, "clip_title": "Series와 DataFrame", "timestamp_start": "00:00:00", "timestamp_end": "00:09:30", "concept_id": "pandas-dataframe"},
+            {"clip_no": 2, "clip_title": "행과 열 선택하기", "timestamp_start": "00:09:31", "timestamp_end": "00:20:00", "concept_id": "pandas-selection"},
+            {"clip_no": 3, "clip_title": "groupby와 집계", "timestamp_start": "00:20:01", "timestamp_end": "00:30:00", "concept_id": "pandas-groupby"}
+          ]
+        },
+        {
+          "chapter_no": 3,
+          "title": "데이터 정제",
+          "clips": [
+            {"clip_no": 1, "clip_title": "결측치 처리", "timestamp_start": "00:00:00", "timestamp_end": "00:09:00", "concept_id": "missing-values"},
+            {"clip_no": 2, "clip_title": "중복 제거와 타입 변환", "timestamp_start": "00:09:01", "timestamp_end": "00:18:00", "concept_id": "data-cleaning"},
+            {"clip_no": 3, "clip_title": "병합과 조인", "timestamp_start": "00:18:01", "timestamp_end": "00:28:00", "concept_id": "pandas-merge"}
+          ]
+        },
+        {
+          "chapter_no": 4,
+          "title": "matplotlib 시각화",
+          "clips": [
+            {"clip_no": 1, "clip_title": "Figure와 Axes 구조", "timestamp_start": "00:00:00", "timestamp_end": "00:09:00", "concept_id": "matplotlib-figure"},
+            {"clip_no": 2, "clip_title": "기본 차트 그리기", "timestamp_start": "00:09:01", "timestamp_end": "00:19:00", "concept_id": "matplotlib-charts"},
+            {"clip_no": 3, "clip_title": "스타일과 레이블", "timestamp_start": "00:19:01", "timestamp_end": "00:28:00", "concept_id": "matplotlib-style"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440006",
+      "title": "LLM 애플리케이션 구축: RAG와 에이전트",
+      "category": "ai",
+      "difficulty": "advanced",
+      "platform": "Clover",
+      "total_chapters": 4,
+      "chapters": [
+        {
+          "chapter_no": 1,
+          "title": "LLM 기초와 프롬프트 엔지니어링",
+          "clips": [
+            {"clip_no": 1, "clip_title": "대규모 언어 모델 개념", "timestamp_start": "00:00:00", "timestamp_end": "00:10:00", "concept_id": "llm-basics"},
+            {"clip_no": 2, "clip_title": "토큰과 컨텍스트 윈도우", "timestamp_start": "00:10:01", "timestamp_end": "00:20:00", "concept_id": "llm-tokens"},
+            {"clip_no": 3, "clip_title": "프롬프트 구성 요소", "timestamp_start": "00:20:01", "timestamp_end": "00:30:00", "concept_id": "prompt-engineering"}
+          ]
+        },
+        {
+          "chapter_no": 2,
+          "title": "벡터 검색과 RAG 구조",
+          "clips": [
+            {"clip_no": 1, "clip_title": "임베딩과 의미 검색", "timestamp_start": "00:00:00", "timestamp_end": "00:10:30", "concept_id": "embeddings"},
+            {"clip_no": 2, "clip_title": "벡터 데이터베이스 선택", "timestamp_start": "00:10:31", "timestamp_end": "00:20:30", "concept_id": "vector-db"},
+            {"clip_no": 3, "clip_title": "RAG 파이프라인 구성", "timestamp_start": "00:20:31", "timestamp_end": "00:31:00", "concept_id": "rag-pipeline"}
+          ]
+        },
+        {
+          "chapter_no": 3,
+          "title": "LangChain과 도구 호출",
+          "clips": [
+            {"clip_no": 1, "clip_title": "LangChain 기본 컴포넌트", "timestamp_start": "00:00:00", "timestamp_end": "00:10:00", "concept_id": "langchain-basics"},
+            {"clip_no": 2, "clip_title": "도구와 함수 호출", "timestamp_start": "00:10:01", "timestamp_end": "00:20:30", "concept_id": "tool-calling"},
+            {"clip_no": 3, "clip_title": "체인 구성과 LCEL", "timestamp_start": "00:20:31", "timestamp_end": "00:30:00", "concept_id": "langchain-chains"}
+          ]
+        },
+        {
+          "chapter_no": 4,
+          "title": "에이전트와 오케스트레이션",
+          "clips": [
+            {"clip_no": 1, "clip_title": "ReAct 패턴", "timestamp_start": "00:00:00", "timestamp_end": "00:10:30", "concept_id": "react-agent"},
+            {"clip_no": 2, "clip_title": "에이전트 상태 관리", "timestamp_start": "00:10:31", "timestamp_end": "00:21:00", "concept_id": "agent-state"},
+            {"clip_no": 3, "clip_title": "다중 에이전트 조율", "timestamp_start": "00:21:01", "timestamp_end": "00:31:00", "concept_id": "multi-agent"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440007",
+      "title": "프론트엔드 기초: HTML, CSS, JavaScript",
+      "category": "frontend",
+      "difficulty": "beginner",
+      "platform": "Clover",
+      "total_chapters": 4,
+      "chapters": [
+        {
+          "chapter_no": 1,
+          "title": "HTML 구조",
+          "clips": [
+            {"clip_no": 1, "clip_title": "문서 구조와 시맨틱 태그", "timestamp_start": "00:00:00", "timestamp_end": "00:09:00", "concept_id": "html-semantic"},
+            {"clip_no": 2, "clip_title": "속성과 폼 요소", "timestamp_start": "00:09:01", "timestamp_end": "00:18:00", "concept_id": "html-forms"},
+            {"clip_no": 3, "clip_title": "접근성 기초", "timestamp_start": "00:18:01", "timestamp_end": "00:27:00", "concept_id": "html-a11y"}
+          ]
+        },
+        {
+          "chapter_no": 2,
+          "title": "CSS 레이아웃",
+          "clips": [
+            {"clip_no": 1, "clip_title": "선택자와 우선순위", "timestamp_start": "00:00:00", "timestamp_end": "00:10:00", "concept_id": "css-selectors"},
+            {"clip_no": 2, "clip_title": "박스 모델", "timestamp_start": "00:10:01", "timestamp_end": "00:19:00", "concept_id": "css-box-model"},
+            {"clip_no": 3, "clip_title": "Flexbox와 Grid", "timestamp_start": "00:19:01", "timestamp_end": "00:30:00", "concept_id": "css-flex-grid"}
+          ]
+        },
+        {
+          "chapter_no": 3,
+          "title": "JavaScript 기본",
+          "clips": [
+            {"clip_no": 1, "clip_title": "변수와 타입", "timestamp_start": "00:00:00", "timestamp_end": "00:09:30", "concept_id": "js-variables"},
+            {"clip_no": 2, "clip_title": "함수와 화살표 함수", "timestamp_start": "00:09:31", "timestamp_end": "00:19:30", "concept_id": "js-functions"},
+            {"clip_no": 3, "clip_title": "배열과 객체", "timestamp_start": "00:19:31", "timestamp_end": "00:29:00", "concept_id": "js-objects"}
+          ]
+        },
+        {
+          "chapter_no": 4,
+          "title": "DOM 조작",
+          "clips": [
+            {"clip_no": 1, "clip_title": "DOM 선택과 이벤트", "timestamp_start": "00:00:00", "timestamp_end": "00:10:00", "concept_id": "dom-events"},
+            {"clip_no": 2, "clip_title": "요소 생성과 수정", "timestamp_start": "00:10:01", "timestamp_end": "00:20:00", "concept_id": "dom-manipulation"},
+            {"clip_no": 3, "clip_title": "이벤트 위임", "timestamp_start": "00:20:01", "timestamp_end": "00:30:00", "concept_id": "event-delegation"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440008",
+      "title": "리액트 실전 — 컴포넌트 설계부터 상태관리까지",
+      "category": "코딩·IT",
+      "difficulty": "intermediate",
+      "platform": "Clover",
+      "total_chapters": 24,
+      "chapters": []
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440009",
+      "title": "피그마 인터랙션 디자인 마스터클래스",
+      "category": "디자인·CG",
+      "difficulty": "beginner",
+      "platform": "Clover",
+      "total_chapters": 18,
+      "chapters": []
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-44665544000a",
+      "title": "집밥의 정석 — 한식 기본기 30가지",
+      "category": "쿠킹·베이킹",
+      "difficulty": "beginner",
+      "platform": "Clover",
+      "total_chapters": 30,
+      "chapters": []
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-44665544000b",
+      "title": "비즈니스 영어 이메일 & 회의 영어",
+      "category": "어학",
+      "difficulty": "intermediate",
+      "platform": "Clover",
+      "total_chapters": 22,
+      "chapters": []
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-44665544000c",
+      "title": "AWS SAA 자격증 한 번에 합격하기",
+      "category": "빅테크 자격증",
+      "difficulty": "intermediate",
+      "platform": "Clover",
+      "total_chapters": 42,
+      "chapters": []
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-44665544000d",
+      "title": "유니티로 만드는 첫 모바일 게임",
+      "category": "게임·웹툰",
+      "difficulty": "beginner",
+      "platform": "Clover",
+      "total_chapters": 28,
+      "chapters": []
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-44665544000e",
+      "title": "데일리 메이크업 클래스",
+      "category": "뷰티·미용",
+      "difficulty": "beginner",
+      "platform": "Clover",
+      "total_chapters": 16,
+      "chapters": []
+    }
+  ]
+}

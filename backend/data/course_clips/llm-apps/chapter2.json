@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 2,
+    "clip_no": 1,
+    "clip_title": "임베딩과 의미 검색",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:30",
+    "concept_id": "embeddings",
+    "script_text": "전통적인 검색은 단어가 정확히 일치해야 결과가 나와요. '강아지'를 검색하면 '강아지' 단어가 들어간 문서만 찾는 식이죠. 하지만 사람은 '멍멍이', '반려견', '개'를 같은 의미로 받아들이잖아요. LLM 시대의 검색은 이 의미적 유사성을 잡아낼 수 있어야 합니다. 그 핵심 기술이 임베딩이에요.\n\n임베딩은 텍스트를 고차원 숫자 벡터로 변환하는 과정입니다. 의미가 비슷한 텍스트는 벡터 공간에서 가까운 점으로, 의미가 먼 텍스트는 멀리 떨어진 점으로 매핑되도록 학습돼 있어요. 그래서 두 텍스트의 유사도를 비교하려면 두 벡터 사이의 거리(보통 코사인 유사도)를 계산하면 됩니다.\n\nfrom openai import OpenAI\nimport numpy as np\n\nclient = OpenAI()\n\ndef embed(text: str) -> list[float]:\n    res = client.embeddings.create(\n        model='text-embedding-3-small',\n        input=text\n    )\n    return res.data[0].embedding\n\ndef cosine(a, b):\n    a, b = np.array(a), np.array(b)\n    return float(a @ b / (np.linalg.norm(a) * np.linalg.norm(b)))\n\nv1 = embed('강아지가 짖는다')\nv2 = embed('멍멍이가 시끄럽게 짖는다')\nv3 = embed('파이썬으로 웹 서버 만드는 법')\n\nprint(cosine(v1, v2))  # 1에 가까움 (의미 유사)\nprint(cosine(v1, v3))  # 0에 가까움 (관련 없음)\n\n임베딩의 가장 큰 매력은 한 번 만들어 두면 빠르게 비교할 수 있다는 거예요. 100만 개의 문서를 미리 임베딩해 두면, 새 질문이 들어왔을 때 그 질문만 임베딩한 다음 100만 개와의 거리를 계산해서 가장 가까운 것들을 찾을 수 있습니다. 이게 의미 검색이에요. RAG의 첫 번째 부품이 바로 이 의미 검색입니다."
+  },
+  {
+    "chapter_no": 2,
+    "clip_no": 2,
+    "clip_title": "벡터 데이터베이스 선택",
+    "timestamp_start": "00:10:31",
+    "timestamp_end": "00:20:30",
+    "concept_id": "vector-db",
+    "script_text": "임베딩을 저장하고 빠르게 검색하려면 벡터에 특화된 저장소가 필요해요. 그게 벡터 데이터베이스입니다.\n\n벡터 DB가 일반 RDB와 다른 점은, '내가 가진 벡터와 가장 가까운 K개를 찾아라' 같은 질의가 핵심 연산이라는 거예요. 일반 인덱스로는 이런 연산이 너무 느리기 때문에, ANN(Approximate Nearest Neighbor)이라는 특수한 인덱스를 사용합니다. 정확도를 약간 양보하는 대신 속도를 수십에서 수백 배 끌어올리는 방식이에요.\n\n선택지는 크게 세 가지로 나눌 수 있어요. 첫째, 기존 RDB에 벡터 확장을 더한 형태입니다. PostgreSQL + pgvector가 대표적이에요. 익숙한 SQL 그대로 쓸 수 있고, 메타데이터 필터링과 결합이 자연스러워요. 작은 규모에서 시작하기 좋습니다.\n\n둘째, 벡터 전용 데이터베이스입니다. 일정 규모 이상에서 빠른 속도와 풍부한 기능을 제공해요. 사내 인프라로 직접 운영할 수도 있고 매니지드 서비스로 쓸 수도 있습니다.\n\n셋째, 인메모리 라이브러리예요. FAISS 같은 도구가 여기에 속합니다. 데이터가 변하지 않고 한 머신에 다 들어가는 시나리오에서는 가장 가벼운 선택이에요.\n\n선택 기준은 '데이터 양', '쓰기 빈도', '메타데이터 필터링이 얼마나 중요한가', 그리고 '운영 부담을 어디까지 감당할 수 있는가'예요. 처음 RAG를 시작한다면 pgvector처럼 익숙한 환경에서 출발하는 걸 권합니다. 나중에 규모가 커지면 그때 가서 더 전문적인 도구로 옮겨도 늦지 않아요."
+  },
+  {
+    "chapter_no": 2,
+    "clip_no": 3,
+    "clip_title": "RAG 파이프라인 구성",
+    "timestamp_start": "00:20:31",
+    "timestamp_end": "00:31:00",
+    "concept_id": "rag-pipeline",
+    "script_text": "RAG는 'Retrieval Augmented Generation'의 약자예요. 한 줄로 풀면 '필요한 정보를 검색해서 LLM의 프롬프트에 끼워 넣는 패턴'입니다. 외부 지식을 모델에 다시 학습시키지 않고도 활용할 수 있어요.\n\n표준적인 RAG 파이프라인은 두 단계로 나뉩니다. 사전 단계와 질의 단계예요.\n\n사전 단계에서는 우리가 가진 문서를 적당한 크기의 조각(chunk)으로 자른 다음, 각 조각을 임베딩해서 벡터 DB에 저장해 둡니다. 이걸 인제스트(ingest)라고 불러요.\n\ndef ingest(documents):\n    for doc in documents:\n        for chunk in chunk_text(doc.text, size=500, overlap=50):\n            vector = embed(chunk)\n            vector_db.insert({\n                'text': chunk,\n                'embedding': vector,\n                'source': doc.source\n            })\n\n질의 단계에서는 사용자 질문을 같은 임베딩 모델로 벡터로 만들고, 벡터 DB에서 가장 가까운 K개 조각을 가져옵니다. 그 조각들을 프롬프트의 맥락 부분에 끼워 넣어 LLM에게 답을 생성하라고 부탁해요.\n\ndef answer(question: str) -> str:\n    q_vec = embed(question)\n    top_chunks = vector_db.search(q_vec, k=4)\n    context = '\\n\\n'.join(c['text'] for c in top_chunks)\n    prompt = f'다음 문맥을 참고해 답하세요.\\n\\n문맥:\\n{context}\\n\\n질문: {question}'\n    return llm.complete(prompt)\n\nRAG의 품질은 결국 '얼마나 좋은 조각을 가져왔는가'에 달려 있어요. 청크 크기와 겹침, 검색 K값, 메타데이터 필터링, 재정렬 등 다양한 손잡이가 있어요. 작은 데이터셋부터 평가 지표를 만들어 두고, 손잡이를 하나씩 바꿔 가며 결과가 어떻게 변하는지 관찰하는 게 RAG를 잘 만드는 가장 빠른 길입니다."
+  }
+]

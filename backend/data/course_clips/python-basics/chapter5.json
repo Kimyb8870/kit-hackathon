@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 5,
+    "clip_no": 1,
+    "clip_title": "클래스와 객체",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:11:00",
+    "concept_id": "python-class",
+    "script_text": "자, 마지막 챕터입니다! 객체지향 프로그래밍을 배워볼 거예요. 클래스를 흔히 '설계도'라고 비유하는데요, Python에서는 클래스 자체도 객체라는 점이 특별해요.\n\nclass Dog:\n    species = '개'  # 클래스 변수\n    \n    def __init__(self, name, age):\n        self.name = name  # 인스턴스 변수\n        self.age = age\n    \n    def bark(self):\n        return f'{self.name}: 멍멍!'\n\nmy_dog = Dog('초코', 3)\nprint(my_dog.bark())  # 초코: 멍멍!\nprint(type(Dog))      # <class 'type'>\n\ntype(Dog)이 type이죠? 클래스도 메타클래스의 인스턴스예요. 그리고 __init__을 '생성자'라고 부르는 분들이 많은데, 정확히는 '초기화 메서드'예요. 실제 생성은 __new__에서 일어나고, __init__은 속성을 설정하는 역할이에요. self는 인스턴스 자신을 가리키며 명시적으로 써야 합니다."
+  },
+  {
+    "chapter_no": 5,
+    "clip_no": 2,
+    "clip_title": "상속과 다형성",
+    "timestamp_start": "00:11:01",
+    "timestamp_end": "00:22:00",
+    "concept_id": "python-inheritance",
+    "script_text": "이번에는 상속을 배워볼게요. 많이 하시는 오해가 '상속은 코드 재사용 도구'라는 거예요. 상속의 진짜 목적은 'is-a' 관계 표현이에요.\n\nclass Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        raise NotImplementedError\n\nclass Dog(Animal):\n    def speak(self):\n        return f'{self.name}: 멍멍!'\n\nclass Cat(Animal):\n    def speak(self):\n        return f'{self.name}: 야옹~'\n\n# 다형성: 같은 메서드, 다른 동작\nfor a in [Dog('초코'), Cat('나비')]:\n    print(a.speak())\n\nDog is an Animal? 맞죠! 하지만 Stack(list)은 부적절해요. 코드 재사용이 목적이면 합성(composition)을 쓰세요.\n\nclass Stack:\n    def __init__(self):\n        self._items = []  # 상속 대신 포함\n    def push(self, item):\n        self._items.append(item)\n    def pop(self):\n        return self._items.pop()\n\nsuper()로 부모 메서드를 호출할 수 있어요. '상속보다 합성을 선호하라'는 OOP 핵심 원칙입니다!"
+  },
+  {
+    "chapter_no": 5,
+    "clip_no": 3,
+    "clip_title": "매직 메서드와 프로토콜",
+    "timestamp_start": "00:22:01",
+    "timestamp_end": "00:33:00",
+    "concept_id": "python-magic-methods",
+    "script_text": "마지막 클립이에요! 매직 메서드를 배워볼게요. 밑줄 두 개가 붙은 특별한 메서드로, 우리 클래스를 내장 타입처럼 동작하게 만들 수 있어요.\n\nclass Vector:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    def __repr__(self):\n        return f'Vector({self.x}, {self.y})'\n    def __str__(self):\n        return f'({self.x}, {self.y})'\n    def __add__(self, other):\n        return Vector(self.x + other.x, self.y + other.y)\n    def __eq__(self, other):\n        return self.x == other.x and self.y == other.y\n\nv1 = Vector(3, 4)\nv2 = Vector(1, 2)\nprint(v1 + v2)   # (4, 6)  (__add__)\nprint(repr(v1))  # Vector(3, 4)  (__repr__)\n\n__str__은 사용자 친화적, __repr__은 개발자용 문자열이에요. __eq__로 == 연산자를 커스터마이즈하는 걸 연산자 오버로딩이라 합니다. 매직 메서드를 구현하면 for, in, with 문과 자연스럽게 연동돼요. 여기까지 Python 기초 완전 정복이었어요. 수고하셨습니다!"
+  }
+]

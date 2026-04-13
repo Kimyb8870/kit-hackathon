@@ -1,0 +1,56 @@
+/**
+ * LMS-only stylesheet (EduMall sample container).
+ *
+ * Loaded from src/app/lms/layout.tsx — only ships when /lms routes render.
+ * Imports Pretendard via CDN and defines the .lms-root scope so the LMS
+ * surface looks visually distinct from the Clover (dark) root layout.
+ */
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+.lms-root {
+  font-family:
+    "Pretendard",
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    "Segoe UI",
+    sans-serif;
+  background: #fafafa;
+  color: #1f1f1f;
+  min-height: 100vh;
+  letter-spacing: -0.01em;
+}
+
+.lms-root * {
+  box-sizing: border-box;
+}
+
+.lms-root a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Force light tone over the dark root <html> */
+.lms-root .lms-card {
+  background: #ffffff;
+  border: 1px solid #ececec;
+}
+
+.lms-root .lms-text-muted {
+  color: #8a8d92;
+}
+.lms-root .lms-text-strong {
+  color: #1f1f1f;
+}
+.lms-root .lms-border {
+  border-color: #ececec;
+}
+
+/* Hide scrollbar for category strip */
+.lms-scroll-x {
+  scrollbar-width: none;
+}
+.lms-scroll-x::-webkit-scrollbar {
+  display: none;
+}

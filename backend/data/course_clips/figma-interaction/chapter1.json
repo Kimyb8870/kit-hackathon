@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 1,
+    "clip_no": 1,
+    "clip_title": "Frame과 Auto Layout 기초",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "figma-auto-layout",
+    "script_text": "피그마에서 가장 먼저 익혀야 하는 기능은 Frame과 Auto Layout입니다. Frame은 여러 요소를 담는 컨테이너이고, Auto Layout은 그 Frame 안의 요소들이 간격과 정렬 규칙에 따라 자동으로 재배치되는 기능이에요.\n\n버튼을 하나 만든다고 해볼게요. Rectangle 하나와 Text 하나를 넣고 둘을 선택한 뒤 Shift+A를 누르면 Auto Layout Frame이 생성됩니다. 이제 버튼의 padding을 16px로, 간격을 8px로 지정하면 텍스트 길이가 바뀌어도 버튼이 자동으로 늘어나고 줄어듭니다.\n\n실무에서 Auto Layout을 쓰면 반응형 컴포넌트를 만들기가 훨씬 쉬워집니다. 카드, 리스트, 툴바 같은 UI가 전부 Auto Layout으로 구성되니까 기본기를 확실히 다져두세요."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 2,
+    "clip_title": "Variants와 컴포넌트 시스템",
+    "timestamp_start": "00:10:00",
+    "timestamp_end": "00:22:00",
+    "concept_id": "figma-variants",
+    "script_text": "피그마의 Variants는 하나의 컴포넌트에 여러 상태를 묶어 두는 기능입니다. 예를 들어 버튼이라면 Primary/Secondary/Danger 같은 Type, Default/Hover/Disabled 같은 State가 있을 수 있어요. 이걸 각각 별도 컴포넌트로 만들면 관리가 어렵지만, Variants로 묶으면 한 컴포넌트 안에서 속성만 바꾸면 됩니다.\n\n만드는 법은 간단해요. 같은 구조의 컴포넌트를 여러 개 만든 뒤 모두 선택하고 'Combine as Variants'를 누르면 됩니다. 그런 다음 Properties 패널에서 Type, State 같은 속성 이름을 붙여주면 됩니다.\n\nVariants가 잘 설계된 디자인 시스템은 개발자에게도 축복입니다. React 컴포넌트의 props와 거의 1:1로 대응되기 때문에 디자인과 구현이 어긋나지 않아요."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 3,
+    "clip_title": "Prototyping과 인터랙션 디자인",
+    "timestamp_start": "00:22:00",
+    "timestamp_end": "00:34:00",
+    "concept_id": "figma-prototyping",
+    "script_text": "피그마의 Prototyping 기능으로 실제처럼 동작하는 인터랙션을 만들 수 있습니다. Prototype 탭에서 화면 A의 버튼을 화면 B로 드래그하면 'On Click → Navigate to' 연결이 생성됩니다. 이것만으로도 앱 흐름을 검증할 수 있어요.\n\n더 나아가 Smart Animate 옵션을 켜면 같은 이름을 가진 요소 사이에 자연스러운 애니메이션이 자동으로 만들어집니다. 예를 들어 작은 카드가 전체 화면으로 확장되는 인터랙션, 아이콘이 회전하는 효과 같은 걸 코드 없이 구현할 수 있어요.\n\n인터랙션 프로토타입의 진짜 가치는 '말로 설명하기 어려운 움직임'을 팀에게 정확히 보여주는 데 있습니다. 애니메이션 타이밍, 이징, 트리거를 실제처럼 체험할 수 있으니까요. 개발자에게 전달할 때도 마찰이 크게 줄어듭니다."
+  }
+]

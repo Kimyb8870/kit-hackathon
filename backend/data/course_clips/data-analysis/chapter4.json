@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 4,
+    "clip_no": 1,
+    "clip_title": "Figure와 Axes 구조",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:09:00",
+    "concept_id": "matplotlib-figure",
+    "script_text": "데이터 분석에서 시각화는 결과를 나누는 마지막 단계예요. 가장 기본이 되는 라이브러리가 matplotlib입니다. 처음 배울 때 가장 헷갈리는 게 'Figure와 Axes의 차이'인데, 한번 잡아 두면 두고두고 편해요.\n\nFigure는 '그림 한 장 전체'예요. 캔버스라고 생각하면 됩니다. Axes는 그 캔버스 안에 있는 '실제 차트'예요. 한 Figure에 Axes가 여러 개 있을 수도 있습니다. 그래서 화면에 차트 두 개를 나란히 놓는다는 건, Figure 하나 안에 Axes 두 개를 만든다는 뜻이에요.\n\nimport matplotlib.pyplot as plt\n\nfig, ax = plt.subplots()       # Figure 하나, Axes 하나\nax.plot([1, 2, 3], [4, 5, 1])\nax.set_title('basic line')\nax.set_xlabel('x')\nax.set_ylabel('y')\nplt.show()\n\nfig, axes = plt.subplots(1, 2, figsize=(10, 4))\naxes[0].plot([1, 2, 3], [4, 5, 1])\naxes[0].set_title('left')\naxes[1].bar(['a', 'b', 'c'], [3, 5, 2])\naxes[1].set_title('right')\nplt.show()\n\nplt.plot()처럼 axes 없이 바로 그리는 방식도 있지만, 가능하면 처음부터 fig, ax = plt.subplots() 패턴에 익숙해지는 걸 권합니다. 차트가 복잡해질수록 명시적으로 ax를 들고 다니는 코드가 훨씬 안전해요. 그 그림에 무엇이 그려져 있는지 한눈에 보이거든요."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 2,
+    "clip_title": "기본 차트 그리기",
+    "timestamp_start": "00:09:01",
+    "timestamp_end": "00:19:00",
+    "concept_id": "matplotlib-charts",
+    "script_text": "matplotlib에서 가장 자주 쓰는 차트 네 종류부터 익혀 봅시다. 선 차트, 막대 차트, 산점도, 히스토그램이에요.\n\nimport matplotlib.pyplot as plt\nimport numpy as np\n\nx = np.linspace(0, 10, 100)\ny = np.sin(x)\n\nfig, ax = plt.subplots()\nax.plot(x, y, label='sin(x)')\nax.legend()\nax.set_title('line chart')\nplt.show()\n\n선 차트는 시간에 따라 변하는 값을 보여 줄 때 적합해요. 매출 추이, 기온 변화, 주가 같은 데이터죠.\n\ncategories = ['food', 'tech', 'fashion']\nvalues = [120, 95, 60]\nfig, ax = plt.subplots()\nax.bar(categories, values, color='steelblue')\nax.set_title('bar chart')\nplt.show()\n\n막대 차트는 카테고리별 값을 비교할 때 좋아요. 가로 막대로 만들고 싶으면 ax.barh를 쓰면 됩니다.\n\nx = np.random.randn(200)\ny = np.random.randn(200)\nfig, ax = plt.subplots()\nax.scatter(x, y, alpha=0.6)\nax.set_title('scatter')\nplt.show()\n\n산점도는 두 변수 사이의 관계를 살펴볼 때 씁니다. 점이 흩어져 있으면 상관이 약하고, 어떤 패턴이 보이면 강한 거예요.\n\ndata = np.random.normal(loc=0, scale=1, size=1000)\nfig, ax = plt.subplots()\nax.hist(data, bins=30)\nax.set_title('histogram')\nplt.show()\n\n히스토그램은 한 변수의 분포를 봅니다. 데이터가 정규분포에 가까운지, 한쪽으로 쏠려 있는지를 한눈에 알 수 있어요. '어떤 차트를 쓸지'는 결국 '무엇을 보여 주고 싶은지'에 달려 있고, 이 네 가지를 손에 익히면 대부분의 상황을 커버할 수 있습니다."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 3,
+    "clip_title": "스타일과 레이블",
+    "timestamp_start": "00:19:01",
+    "timestamp_end": "00:28:00",
+    "concept_id": "matplotlib-style",
+    "script_text": "보기 좋은 차트는 정보 전달력이 다릅니다. matplotlib는 작은 옵션들로 차트의 인상을 크게 바꿀 수 있어요.\n\nimport matplotlib.pyplot as plt\nimport numpy as np\n\nx = np.linspace(0, 10, 100)\ny1 = np.sin(x)\ny2 = np.cos(x)\n\nfig, ax = plt.subplots(figsize=(8, 4))\nax.plot(x, y1, label='sin', color='#1f77b4', linewidth=2)\nax.plot(x, y2, label='cos', color='#ff7f0e', linewidth=2, linestyle='--')\nax.set_title('Sine and Cosine', fontsize=14)\nax.set_xlabel('angle (rad)')\nax.set_ylabel('value')\nax.set_xlim(0, 10)\nax.set_ylim(-1.2, 1.2)\nax.grid(True, alpha=0.3)\nax.legend(loc='upper right')\nplt.tight_layout()\nplt.show()\n\n색상은 hex로 직접 지정할 수도 있고, 'red'나 'tab:blue' 같은 이름을 써도 됩니다. linestyle은 '--'(점선), '-.'(쇄선), ':'(점) 같은 형태가 있어요.\n\n차트 전체의 분위기를 한 번에 바꾸고 싶으면 스타일시트를 활용하면 좋아요.\n\nplt.style.use('seaborn-v0_8-whitegrid')\n\n이렇게 한 줄만 추가해도 격자, 색상 팔레트, 폰트가 한꺼번에 깔끔하게 정돈됩니다.\n\n마지막으로 저장. fig.savefig('chart.png', dpi=200, bbox_inches='tight')로 PNG, SVG, PDF 등 원하는 형식으로 출력할 수 있어요. dpi를 높이면 인쇄용에도 쓸 수 있는 고해상도 이미지가 되고, bbox_inches='tight'는 여백을 자동으로 잘라 줍니다. 데이터와 시각화를 함께 다룰 줄 알면 분석 결과를 사람에게 전달하는 능력이 한층 강해집니다."
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 1,
+    "clip_no": 1,
+    "clip_title": "Python 소개 및 설치",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:07:30",
+    "concept_id": "python-intro",
+    "script_text": "안녕하세요, 여러분! 이번 강의에서는 Python이라는 프로그래밍 언어를 처음부터 함께 배워볼 거예요. Python은 1991년에 귀도 반 로섬이라는 분이 만든 언어인데요, 이름이 뱀이 아니라 영국 코미디 쇼 '몬티 파이썬'에서 따온 거라는 거 아셨나요? Python의 가장 큰 장점은 문법이 깔끔하다는 점이에요. 예를 들어 화면에 글자를 출력하려면 이렇게 한 줄이면 됩니다.\n\nprint('Hello, World!')\n\n자바나 C 같은 언어는 이것만 하려 해도 여러 줄을 써야 하거든요. 설치도 간단해요. python.org에서 최신 버전을 다운받아서 설치하면 되는데, 설치할 때 'Add Python to PATH' 체크박스를 꼭 체크해 주세요. 이걸 안 하면 터미널에서 python 명령어가 안 먹어요. 설치가 끝나면 터미널에서 python --version을 쳐서 버전이 뜨는지 확인해 보세요.\n\npython --version\n# Python 3.12.0\n\n이렇게 뜨면 성공입니다! 이제 본격적으로 Python의 세계로 들어가 볼게요."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 2,
+    "clip_title": "변수와 자료형",
+    "timestamp_start": "00:07:31",
+    "timestamp_end": "00:17:00",
+    "concept_id": "python-variables",
+    "script_text": "자, 이번에는 변수를 배워볼게요. 변수를 처음 배울 때 '값을 담는 상자'라고 비유하는 경우가 많은데요, 사실 이건 정확하지 않아요. Python에서 변수는 상자가 아니라 '이름표'에 가깝습니다. 예를 들어볼게요.\n\nx = 10\n\n이 코드는 메모리 어딘가에 10이라는 정수 객체가 만들어지고, x라는 이름표를 그 객체에 붙이는 거예요. 왜 이게 중요하냐면, 상자 비유로는 이런 상황이 설명이 안 돼요.\n\na = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)  # [1, 2, 3, 4]\n\na를 바꾼 적이 없는데 a도 바뀌었죠? 이름표 개념이면 이해가 돼요. a와 b가 같은 리스트 객체를 가리키고 있으니까요. 자료형은 type() 함수로 확인할 수 있어요.\n\ntype(10)      # <class 'int'>\ntype(3.14)    # <class 'float'>\ntype('hello') # <class 'str'>\ntype(True)    # <class 'bool'>\n\nPython은 동적 타이핑 언어라서 변수에 다른 타입의 값을 다시 대입할 수도 있어요. 이것도 이름표 개념으로 보면 자연스러워요. 기존 이름표를 떼고 다른 객체에 붙이는 거니까요."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 3,
+    "clip_title": "입출력과 기본 연산자",
+    "timestamp_start": "00:17:01",
+    "timestamp_end": "00:27:00",
+    "concept_id": "python-io",
+    "script_text": "이번에는 입출력과 연산자를 살펴볼게요. 먼저 출력은 print() 함수를 쓰면 되는데요, 여러 값을 한꺼번에 출력할 수도 있어요.\n\nname = '철수'\nage = 20\nprint(f'{name}님은 {age}살입니다.')\n# 철수님은 20살입니다.\n\nf-string을 쓰면 변수를 문자열 안에 바로 넣을 수 있어서 정말 편해요. 입력은 input() 함수를 씁니다.\n\nuser_input = input('나이를 입력하세요: ')\nprint(type(user_input))  # <class 'str'>\n\n여기서 중요한 점! input()은 항상 문자열을 반환해요. 숫자로 쓰고 싶으면 int()나 float()로 변환해야 합니다.\n\nage = int(input('나이: '))\nyear = 2026 - age\n\n연산자도 알아볼게요. 기본 사칙연산 +, -, *, / 외에 특별한 연산자들이 있어요.\n\nprint(7 / 2)   # 3.5  (일반 나눗셈)\nprint(7 // 2)  # 3    (정수 나눗셈, 소수점 버림)\nprint(7 % 2)   # 1    (나머지)\nprint(2 ** 10) # 1024 (거듭제곱)\n\n특히 //는 몫을 구할 때, %는 나머지를 구할 때 자주 쓰니까 꼭 기억해 두세요. 짝수/홀수 판별할 때 n % 2 == 0 이런 식으로 많이 활용됩니다."
+  }
+]

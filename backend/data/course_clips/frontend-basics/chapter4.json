@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 4,
+    "clip_no": 1,
+    "clip_title": "DOM 선택과 이벤트",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "dom-events",
+    "script_text": "DOM은 Document Object Model의 약자예요. 브라우저가 HTML 문서를 메모리에 트리 모양으로 올려놓은 것이라고 생각하면 됩니다. JavaScript는 이 트리에 접근해서 요소를 읽고 바꿀 수 있어요.\n\n요소를 선택하는 가장 자주 쓰는 방법은 querySelector예요. CSS 선택자 문법을 그대로 쓸 수 있어서 직관적입니다.\n\nconst title = document.querySelector('#title');\nconst items = document.querySelectorAll('.item');\n\nquerySelector는 첫 번째 일치하는 요소 하나를, querySelectorAll은 모든 일치 요소를 NodeList로 돌려줘요. NodeList는 배열과 비슷하지만 진짜 배열은 아니라서, 배열 메서드를 쓰려면 Array.from으로 감싸거나 스프레드 연산자를 씁니다.\n\n이벤트는 사용자의 행동(클릭, 입력, 마우스 움직임 등)에 반응하는 방법이에요. addEventListener로 등록합니다.\n\nconst button = document.querySelector('#submit');\nbutton.addEventListener('click', (event) => {\n  console.log('버튼이 클릭됐어요');\n  console.log(event.target);\n});\n\n첫 번째 인자가 이벤트 이름, 두 번째가 콜백 함수예요. 콜백은 event 객체를 받는데, 여기에 어떤 요소가 어떤 시점에 무엇을 했는지에 대한 정보가 다 들어 있습니다.\n\n폼 입력에는 input 이벤트, 폼 전송에는 submit 이벤트, 키보드는 keydown과 keyup, 마우스는 mouseover와 mouseout 같은 이벤트가 있어요. 모두 같은 addEventListener 패턴으로 다룰 수 있기 때문에 한 번 익히면 응용이 자연스럽습니다."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 2,
+    "clip_title": "요소 생성과 수정",
+    "timestamp_start": "00:10:01",
+    "timestamp_end": "00:20:00",
+    "concept_id": "dom-manipulation",
+    "script_text": "DOM의 요소를 동적으로 만들고 바꾸는 일은 프론트엔드의 일상이에요. 새 글이 추가되면 목록에 한 줄을 더하고, 데이터가 바뀌면 화면을 갱신하는 거죠.\n\n이미 있는 요소의 내용을 바꾸려면 textContent나 innerHTML을 씁니다.\n\nconst label = document.querySelector('#label');\nlabel.textContent = '안녕, Ari';\n\n중요한 안전 수칙 하나. 사용자 입력을 그대로 innerHTML에 넣으면 안 돼요. <script>를 포함한 위험한 HTML이 그대로 실행되면서 XSS 공격의 통로가 됩니다. 단순한 글자 표시에는 항상 textContent를 쓰세요.\n\n새 요소를 만들 때는 createElement와 appendChild를 씁니다.\n\nconst list = document.querySelector('#todo-list');\n\nfunction addTodo(text) {\n  const li = document.createElement('li');\n  li.textContent = text;\n  li.classList.add('todo-item');\n  list.appendChild(li);\n}\n\naddTodo('우유 사기');\naddTodo('운동하기');\n\n클래스 조작은 classList의 add, remove, toggle, contains로 합니다. setAttribute, getAttribute로 임의의 속성도 다룰 수 있어요.\n\nlabel.classList.add('highlight');\nlabel.classList.toggle('hidden');\nlabel.setAttribute('data-user-id', '42');\n\n주의할 점은 DOM 조작이 비싸다는 거예요. 한 번 조작할 때마다 브라우저가 화면을 다시 그릴 준비를 합니다. 100개의 요소를 한 줄씩 append하면 100번 흔들리니까, 가능하면 DocumentFragment를 만들어서 한 번에 추가하는 식으로 묶는 게 좋아요. 이런 최적화 고민이 깊어지면 자연스럽게 React 같은 프레임워크로 넘어가게 됩니다."
+  },
+  {
+    "chapter_no": 4,
+    "clip_no": 3,
+    "clip_title": "이벤트 위임",
+    "timestamp_start": "00:20:01",
+    "timestamp_end": "00:30:00",
+    "concept_id": "event-delegation",
+    "script_text": "할 일 목록처럼 동적으로 늘어나는 요소가 100개 있다고 해 봅시다. 각 항목에 클릭 이벤트를 일일이 붙이면 어떻게 될까요? 새 항목이 추가될 때마다 또 붙여 줘야 하고, 메모리도 더 쓰게 돼요. 더 깔끔한 방법이 이벤트 위임(event delegation)입니다.\n\n이벤트 위임은 '자식 각자에게 붙이지 말고, 부모 하나에게만 붙이자'는 아이디어예요. 이게 가능한 이유는 이벤트가 자식에서 발생해서 부모로 거슬러 올라가는 '버블링' 단계를 거치기 때문입니다. 부모는 자기 안 어딘가에서 발생한 이벤트를 모두 들을 수 있어요.\n\nconst list = document.querySelector('#todo-list');\n\nlist.addEventListener('click', (event) => {\n  const target = event.target;\n  if (target.matches('.delete-btn')) {\n    target.closest('.todo-item').remove();\n  } else if (target.matches('.toggle-btn')) {\n    target.closest('.todo-item').classList.toggle('done');\n  }\n});\n\n위 코드에서는 list에만 이벤트 리스너가 하나 붙어 있어요. 안에 있는 todo-item이 100개든 1000개든 상관없습니다. 새 항목을 추가할 때도 추가 등록이 필요 없어요. 새 항목 안의 버튼을 클릭하면 부모인 list가 그 클릭을 듣고 처리해 주니까요.\n\n이벤트 위임의 장점은 세 가지예요. 첫째, 등록하는 리스너 수가 줄어서 메모리가 절약됩니다. 둘째, 동적으로 추가되는 요소도 자동으로 동작합니다. 셋째, 한곳에서 이벤트 처리 로직을 관리하니 코드가 정돈돼요.\n\n이 작은 패턴이 익숙해지면 자바스크립트로 만드는 UI가 한층 단단해집니다. 그리고 React 같은 프레임워크가 사실 내부에서 이벤트 위임을 활용해 동작한다는 사실을 알고 나면, 라이브러리들이 어떻게 만들어졌는지에 대한 감도 함께 자라게 돼요."
+  }
+]

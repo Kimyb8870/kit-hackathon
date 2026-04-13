@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 3,
+    "clip_no": 1,
+    "clip_title": "await의 진짜 동작",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "await-semantics",
+    "script_text": "await라는 키워드는 처음 보면 '결과가 올 때까지 기다려라'라고만 이해해도 충분해요. 하지만 한 단계 더 들어가면 더 정확한 그림이 보입니다. await는 '여기서 멈췄다가 결과가 준비되면 이어서 실행해라, 그 사이에 이벤트 루프는 다른 일을 해도 좋다'는 신호예요.\n\nasync def fetch():\n    response = await http.get('/api/items')\n    items = await response.json()\n    return items\n\n위 코드에서 첫 번째 await는 HTTP 응답이 올 때까지 멈춥니다. 그동안 이벤트 루프는 다른 task를 처리할 수 있어요. 응답이 도착하면 fetch는 잠에서 깨어나 다음 줄로 진행합니다.\n\n주의할 점은 'await할 수 있는 객체'가 정해져 있다는 거예요. 코루틴, task, future가 awaitable입니다. 일반 객체에 await를 붙이면 TypeError가 나요. 그리고 await 표현식의 결과는 awaitable이 돌려준 값입니다. await fetch_user(1)의 결과는 fetch_user의 return 값이에요.\n\n또 자주 헷갈리는 부분이 있어요. await는 함수를 호출하는 행위가 아니라 '이미 만들어진 awaitable의 결과를 기다리는' 행위입니다. 그래서 fetch_user(1)이라는 코루틴 객체를 만든 다음 await로 풀어 주는 거예요. 이걸 머리에 그려 두면 'await로 깜빡이는 코드'와 'task로 동시에 도는 코드'의 차이가 보이기 시작합니다."
+  },
+  {
+    "chapter_no": 3,
+    "clip_no": 2,
+    "clip_title": "gather와 wait",
+    "timestamp_start": "00:10:01",
+    "timestamp_end": "00:20:00",
+    "concept_id": "async-gather",
+    "script_text": "여러 비동기 작업을 한꺼번에 돌리고 싶을 때 가장 자주 쓰는 도구가 asyncio.gather예요. gather는 여러 awaitable을 한꺼번에 실행하고, 모두 끝났을 때 결과를 리스트로 돌려줍니다.\n\nimport asyncio\n\nasync def fetch_one(i):\n    await asyncio.sleep(1)\n    return i * 2\n\nasync def main():\n    results = await asyncio.gather(\n        fetch_one(1),\n        fetch_one(2),\n        fetch_one(3),\n    )\n    print(results)  # [2, 4, 6]\n\nasyncio.run(main())\n\n세 작업이 동시에 잠들어 있다가 같이 깨어나기 때문에, 전체 시간이 1초로 줄어듭니다. 직렬로 await했다면 3초가 걸렸겠죠.\n\ngather에는 return_exceptions라는 옵션이 있어요. 기본값은 False라서 한 작업에서 예외가 나면 전체가 즉시 실패합니다. True로 두면 예외도 결과 리스트에 그대로 들어가요. 하나가 실패해도 나머지는 계속 진행하고 싶을 때 유용합니다.\n\nasyncio.wait는 gather와 비슷하지만 더 세밀한 제어를 줍니다. 'FIRST_COMPLETED'로 두면 먼저 끝난 것 하나만 기다릴 수 있고, 타임아웃을 걸어 일부만 끝났을 때 결과를 받을 수도 있어요. 일반적인 용도에는 gather가 더 직관적이고, 정교한 시나리오에서는 wait를 꺼내 들면 됩니다. 둘 다 손에 익히면 비동기 코드가 정말 자연스러워져요."
+  },
+  {
+    "chapter_no": 3,
+    "clip_no": 3,
+    "clip_title": "async context manager",
+    "timestamp_start": "00:20:01",
+    "timestamp_end": "00:30:00",
+    "concept_id": "async-context",
+    "script_text": "동기 코드에서 with 문은 자원 관리의 표준 도구죠. 파일을 열고 닫거나, 락을 잡고 푸는 데 씁니다. 비동기 코드에서도 같은 필요가 있어요. 비동기 자원의 시작과 끝을 안전하게 관리하기 위해 async with라는 형태가 추가됐습니다.\n\n비동기 컨텍스트 매니저는 __aenter__와 __aexit__ 메서드를 가진 객체예요. 이름에 a가 붙은 것 말고는 동기 버전과 똑같습니다.\n\nclass DbSession:\n    async def __aenter__(self):\n        self._conn = await db.connect()\n        return self._conn\n    async def __aexit__(self, exc_type, exc, tb):\n        await self._conn.close()\n\nasync def main():\n    async with DbSession() as conn:\n        rows = await conn.fetch('SELECT * FROM users')\n        print(rows)\n\n블록을 빠져나갈 때 예외가 나든 정상 종료든 __aexit__가 항상 호출되기 때문에, 연결을 잊고 닫지 않는 일이 없습니다. 비동기 HTTP 클라이언트, 비동기 락, 비동기 데이터베이스 연결 풀 같은 거의 모든 비동기 자원이 이 패턴을 따라요.\n\n작은 팁 하나. 동기와 비동기 컨텍스트 매니저를 같은 클래스로 만들고 싶다면 __enter__와 __aenter__를 함께 정의할 수 있습니다. 하지만 가급적이면 한 가지로 통일하는 게 혼동을 줄여요. 일관된 자원 관리는 비동기 코드의 안정성을 결정짓는 가장 중요한 습관 중 하나입니다."
+  }
+]

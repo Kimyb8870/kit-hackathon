@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 1,
+    "clip_no": 1,
+    "clip_title": "HTTP 프로토콜 개요",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:09:00",
+    "concept_id": "http-basics",
+    "script_text": "안녕하세요. 백엔드 개발의 첫 걸음, HTTP 프로토콜부터 시작해 볼게요. HTTP는 'HyperText Transfer Protocol'의 약자로, 웹 브라우저와 서버가 대화하는 약속이에요. 우리가 주소창에 URL을 치면 그 순간 브라우저는 서버에게 HTTP 요청을 보냅니다.\n\nHTTP의 가장 큰 특징은 '무상태(stateless)'라는 점이에요. 무슨 뜻이냐면, 서버는 이전에 누가 무엇을 요청했는지 기억하지 않는다는 거예요. 매 요청마다 새로운 손님으로 대합니다. 그래서 로그인 같은 상태를 유지하려면 쿠키나 토큰 같은 별도 장치를 써야 해요.\n\n또 하나, HTTP는 텍스트 기반이에요. 우리가 직접 읽을 수 있는 형식이라 디버깅이 편합니다. 아주 단순한 요청은 이렇게 생겼어요.\n\nGET /users/42 HTTP/1.1\nHost: example.com\n\n이 요청은 'example.com 서버에 있는 42번 사용자 정보를 보여 주세요'라는 의미입니다. HTTP가 이렇게 단순하기 때문에 전 세계 인터넷이 이 위에서 돌아갈 수 있어요. 다음 클립에서는 이 요청과 응답이 어떤 구조로 이루어져 있는지 자세히 살펴볼게요."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 2,
+    "clip_title": "요청과 응답의 구조",
+    "timestamp_start": "00:09:01",
+    "timestamp_end": "00:18:00",
+    "concept_id": "request-response",
+    "script_text": "이번 클립에서는 HTTP 요청과 응답의 구조를 뜯어볼게요. 요청은 크게 세 부분으로 나뉩니다. 시작 줄, 헤더, 그리고 본문이에요.\n\n시작 줄에는 메서드, 경로, 프로토콜 버전이 들어갑니다. 예를 들면 'POST /api/login HTTP/1.1' 같은 식이죠. 헤더는 '키: 값' 형태로 부가 정보를 담습니다. Content-Type, Authorization, User-Agent 같은 게 헤더예요. 본문은 실제로 보낼 데이터인데, GET 요청에는 보통 본문이 없고 POST나 PUT 요청에 들어갑니다.\n\nPOST /api/login HTTP/1.1\nContent-Type: application/json\n\n{\"email\": \"user@example.com\", \"password\": \"secret\"}\n\n응답도 비슷한 구조예요. 시작 줄에 상태 코드가 오고, 헤더가 따라오고, 마지막에 본문이 옵니다.\n\nHTTP/1.1 200 OK\nContent-Type: application/json\n\n{\"token\": \"abc123\"}\n\n핵심은 요청과 응답이 거울처럼 대칭적이라는 점입니다. 클라이언트가 보내는 형식과 서버가 돌려주는 형식이 같은 골격을 갖고 있어요. 이 구조만 머릿속에 그리고 있으면 어떤 백엔드 프레임워크를 만나도 금방 적응할 수 있습니다."
+  },
+  {
+    "chapter_no": 1,
+    "clip_no": 3,
+    "clip_title": "상태 코드와 HTTP 메서드",
+    "timestamp_start": "00:18:01",
+    "timestamp_end": "00:27:00",
+    "concept_id": "http-methods",
+    "script_text": "HTTP 메서드와 상태 코드를 익히면 API 디자인의 절반은 끝났다고 봐도 됩니다. 메서드는 '무엇을 할지'를 표현해요.\n\nGET은 자원을 가져오는 동작입니다. 여러 번 호출해도 결과가 같아야 해요. 이걸 '안전하다'고 표현합니다. POST는 새 자원을 생성할 때 씁니다. 같은 요청을 두 번 보내면 두 개가 만들어질 수 있어요. PUT은 자원을 통째로 교체, PATCH는 일부만 수정, DELETE는 삭제입니다.\n\n상태 코드는 응답이 어떻게 처리됐는지 알려 주는 세 자리 숫자예요. 100번대는 정보, 200번대는 성공, 300번대는 리다이렉션, 400번대는 클라이언트 잘못, 500번대는 서버 잘못입니다.\n\n200 OK            # 잘 처리됨\n201 Created       # 새 자원 생성됨\n400 Bad Request   # 요청 형식이 잘못됨\n401 Unauthorized  # 로그인이 필요함\n404 Not Found     # 자원이 없음\n500 Internal Error # 서버 오류\n\n흔히 헷갈리는 건 401과 403이에요. 401은 '누구인지 모르겠다'이고, 403은 '누구인지는 알지만 권한이 없다'입니다. API를 설계할 때 이 작은 차이가 클라이언트 개발자에게 큰 도움이 됩니다."
+  }
+]

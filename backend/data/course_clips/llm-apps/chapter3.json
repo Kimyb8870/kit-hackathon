@@ -1,0 +1,29 @@
+[
+  {
+    "chapter_no": 3,
+    "clip_no": 1,
+    "clip_title": "LangChain 기본 컴포넌트",
+    "timestamp_start": "00:00:00",
+    "timestamp_end": "00:10:00",
+    "concept_id": "langchain-basics",
+    "script_text": "LLM 애플리케이션을 처음부터 다 직접 만들 수도 있지만, 실무에서는 검증된 부품을 가져다 쓰는 게 빠릅니다. 그런 부품 모음 중 하나가 LangChain이에요.\n\nLangChain은 LLM 워크플로를 작은 단위로 추상화해서 제공합니다. 자주 만나는 부품 몇 가지만 봅시다.\n\n첫째는 모델 래퍼예요. OpenAI, Anthropic, 로컬 모델을 모두 같은 인터페이스로 다룰 수 있게 해 줍니다.\n\nfrom langchain_openai import ChatOpenAI\nllm = ChatOpenAI(model='gpt-4o-mini', temperature=0.2)\n\n둘째는 프롬프트 템플릿이에요. 변수가 들어갈 자리가 있는 문자열을 안전하게 다루는 도구입니다.\n\nfrom langchain_core.prompts import ChatPromptTemplate\n\nprompt = ChatPromptTemplate.from_messages([\n    ('system', '당신은 친절한 한국어 학습 도우미입니다.'),\n    ('user', '이 문장을 격식체로 바꿔 주세요: {text}')\n])\n\n셋째는 출력 파서예요. LLM이 만든 텍스트를 우리가 원하는 자료구조(딕셔너리, Pydantic 모델, JSON 등)로 변환해 줍니다.\n\n넷째는 도구(Tool)와 에이전트입니다. LLM이 단순히 답만 만드는 게 아니라, 외부 함수를 호출해서 실제 작업을 수행하게 해 주는 부품이에요.\n\nLangChain의 가치는 '연결'에 있어요. 모델, 프롬프트, 파서, 도구를 같은 인터페이스로 묶어서 한 줄로 합칠 수 있게 만들어 줍니다. 직접 만들었으면 보일러플레이트가 잔뜩 생겼을 것을, 표준화된 형태로 짧게 표현할 수 있어요. 다만 라이브러리가 빠르게 변하기 때문에, 핵심 개념을 잡아 두고 공식 문서를 옆에 두고 작업하는 게 안전합니다."
+  },
+  {
+    "chapter_no": 3,
+    "clip_no": 2,
+    "clip_title": "도구와 함수 호출",
+    "timestamp_start": "00:10:01",
+    "timestamp_end": "00:20:30",
+    "concept_id": "tool-calling",
+    "script_text": "LLM의 가장 큰 약점 중 하나가 '실제 세상과 분리되어 있다'는 점이에요. 이걸 해결하는 기술이 도구 호출(tool calling, function calling)입니다.\n\n흐름은 이렇습니다. 우리가 미리 '이런 함수가 있고, 이런 인자를 받아 이런 일을 한다'를 LLM에게 설명해 둡니다. LLM은 사용자 질문을 보고 '아, 이건 그 함수를 부르면 되겠다'고 판단하면, 그 함수의 이름과 인자를 JSON으로 돌려줘요. 우리 코드는 그 JSON을 보고 실제 함수를 호출한 다음, 결과를 다시 LLM에게 돌려줍니다. 그러면 LLM이 결과를 자연어로 풀어서 사용자에게 답해요.\n\nfrom langchain_core.tools import tool\n\n@tool\ndef get_weather(city: str) -> str:\n    '''특정 도시의 현재 날씨를 알려준다.'''\n    return f'{city}는 흐리고 18도입니다.'\n\n@tool\ndef calculate(expression: str) -> str:\n    '''수학 표현식을 계산한다.'''\n    return str(eval(expression))\n\ntools = [get_weather, calculate]\nllm_with_tools = llm.bind_tools(tools)\n\n사용자가 '서울 날씨 알려 줘'라고 물으면 모델은 get_weather(city='서울')을 호출하라고 응답하고, '13 곱하기 17은?'이라고 물으면 calculate(expression='13*17')을 호출하라고 합니다.\n\n도구 설명(docstring)이 정말 중요해요. 모델은 docstring과 인자 타입만 보고 어떤 도구를 언제 쓸지 판단하기 때문입니다. '이 함수는 무엇을 하는가, 언제 부르면 좋은가, 어떤 인자가 필요한가'를 사람도 한 번에 이해할 수 있게 적어 두면, 모델의 판단도 훨씬 정확해져요. 도구 호출은 LLM과 우리 코드를 연결하는 가장 강력한 다리이고, 에이전트의 토대가 되는 기술입니다."
+  },
+  {
+    "chapter_no": 3,
+    "clip_no": 3,
+    "clip_title": "체인 구성과 LCEL",
+    "timestamp_start": "00:20:31",
+    "timestamp_end": "00:30:00",
+    "concept_id": "langchain-chains",
+    "script_text": "LangChain에서 부품을 연결하는 표준 방식이 LCEL(LangChain Expression Language)이에요. 파이프 연산자 |로 컴포넌트를 이어 붙이는 방식입니다.\n\nfrom langchain_core.prompts import ChatPromptTemplate\nfrom langchain_core.output_parsers import StrOutputParser\nfrom langchain_openai import ChatOpenAI\n\nprompt = ChatPromptTemplate.from_messages([\n    ('system', '너는 한국어 요약 도우미야.'),\n    ('user', '다음 내용을 세 문장으로 요약해 줘: {text}')\n])\nllm = ChatOpenAI(model='gpt-4o-mini')\nparser = StrOutputParser()\n\nchain = prompt | llm | parser\n\nresult = chain.invoke({'text': '오늘 회의에서는 신제품 출시 일정을 ...'})\nprint(result)\n\n이 한 줄짜리 체인이 사실 꽤 많은 일을 합니다. prompt가 사용자 입력으로 메시지를 만들고, 그 메시지를 llm에 넘겨 응답을 받고, parser가 응답을 문자열로 정리해 돌려줘요. 셋 중 하나만 바꾸고 싶으면 그 자리만 갈아 끼우면 됩니다.\n\n체인의 진짜 매력은 '동기, 비동기, 스트리밍, 배치를 모두 같은 객체가 지원한다'는 점이에요.\n\nresult = chain.invoke(...)\n# 또는\nasync_result = await chain.ainvoke(...)\n# 또는 토큰 스트리밍\nfor token in chain.stream(...):\n    print(token, end='')\n\n동기와 비동기를 따로 짜지 않아도 되니 코드가 한결 짧아져요. 더 복잡한 흐름이 필요하면 RunnableLambda, RunnableParallel 같은 부품을 더해서 분기와 병렬 처리도 만들 수 있습니다. LCEL은 처음에는 어색해 보이지만 익숙해지면 LLM 워크플로를 거의 한 줄짜리 시처럼 표현할 수 있게 돼요."
+  }
+]
